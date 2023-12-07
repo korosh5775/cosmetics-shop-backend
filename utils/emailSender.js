@@ -10,7 +10,7 @@ const transporterDetails = smtpTransport({
     pass: "my pass",
   },
   tls: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: false,//"Transport Layer Security" set false value just in development environment
   },
 });
 

@@ -20,7 +20,7 @@ const login = async (req, res, next) => {
       const passwordCheck = await bcrypt.compare(password, userCheck.password);
   
       if (passwordCheck) {
-        //* the user informations that commes with token
+        //* the user informations for token payload
         const user = {
           userId: userCheck._id.toString(),
           email: userCheck.email,

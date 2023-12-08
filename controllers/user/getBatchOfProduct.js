@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const Products = require("../../models/productsSchema");
 
 const getBatchOfProduct = async (req, res, next) => {

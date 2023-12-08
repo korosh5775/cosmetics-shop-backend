@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const express = require("express");
 const register = require("../../../controllers/userAuth/register");
 const login = require("../../../controllers/userAuth/login");

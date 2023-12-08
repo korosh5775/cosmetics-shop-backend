@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const mongoose = require("mongoose");
 
 //create connection

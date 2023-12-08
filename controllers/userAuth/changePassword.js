@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const User = require("../../models/usersSchema");
 const emailSender = require("../../utils/emailSender");
 const jwt = require("jsonwebtoken");

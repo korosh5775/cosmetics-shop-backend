@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const nodeMailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 

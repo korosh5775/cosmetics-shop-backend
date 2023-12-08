@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const express = require("express");
 const indexRoutes = require("./routes/index");
 const bodyParser = require("body-parser");

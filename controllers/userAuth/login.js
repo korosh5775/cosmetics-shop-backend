@@ -1,4 +1,4 @@
-//import moduls
+//import modules
 const User = require("../../models/usersSchema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");

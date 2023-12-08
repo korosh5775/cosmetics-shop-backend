@@ -22,6 +22,10 @@ const productSchema = mongoose.Schema({
     maxlength: 200,
     required: true,
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "ProductsCategory",
+  },
 });
 
 //export schema

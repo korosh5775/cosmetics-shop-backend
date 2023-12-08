@@ -4,13 +4,13 @@ const smtpTransport = require("nodemailer-smtp-transport");
 
 //details of transporter
 const transporterDetails = smtpTransport({
-  service: "yahoo",
+  service: "service that send email by it",
   auth: {
-    user: "mydeveloperemail@yahoo.com",
-    pass: "mqqbtupakcmthcdm",
+    user: "my email",
+    pass: "my pass",
   },
-  tls: {
-    rejectUnauthorized: false,
+  tls: {//"Transport Layer Security" 
+    rejectUnauthorized: false,//Send email without checking SSL and TLS certificates from the server... "set false value just in development environment"
   },
 });
 

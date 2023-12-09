@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const express = require("express");
 
 //*get router from express
@@ -8,5 +8,5 @@ const router = express.Router();
 const userAuthV_1_1 = require("./api/v1.1/users");
 router.use("/userAuth/v1.1", userAuthV_1_1);
 
-//*export module
+//*export router
 module.exports = router;

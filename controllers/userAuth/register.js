@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const User = require("../../models/usersSchema");
 const emailSender = require("../../utils/emailSender");
 const jwt = require("jsonwebtoken");
@@ -42,7 +42,7 @@ const register = async (req, res, next) => {
   }
 };
 
-//*export module
+//*export registerHandler
 module.exports = register;
 
 //end of register.........................................................................................

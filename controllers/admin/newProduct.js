@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const Products = require("../../models/productsSchema");
 
 const newProduct = async (req, res, next) => {

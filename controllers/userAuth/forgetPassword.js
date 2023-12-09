@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const User = require("../../models/usersSchema");
 const emailSender = require("../../utils/emailSender");
 const jwt = require("jsonwebtoken");
@@ -40,7 +40,7 @@ const forgetPassword = async (req, res, next) => {
     }
   };
   
-  //*export module
+  //*export forget password
   module.exports = forgetPassword;
   //end of forget password.........................................................................................
   

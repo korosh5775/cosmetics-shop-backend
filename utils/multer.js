@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const multer = require("multer");
 
 //define the storage destination for saving images

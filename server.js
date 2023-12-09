@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const express = require("express");
 const indexRoutes = require("./routes/index");
 const bodyParser = require("body-parser");

@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const nodeMailer = require("nodemailer");
 const smtpTransport = require("nodemailer-smtp-transport");
 
@@ -32,5 +32,5 @@ const emailSender = (email, subject, text) => {
   );
 };
 
-//export module
+//export emailSender
 module.exports = emailSender;

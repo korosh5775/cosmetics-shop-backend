@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const User = require("../../models/usersSchema");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -41,7 +41,7 @@ const login = async (req, res, next) => {
     }
   };
 
-  //*export module
+  //*export login handler
   module.exports = login;
   //end of login.............................................................................................
   

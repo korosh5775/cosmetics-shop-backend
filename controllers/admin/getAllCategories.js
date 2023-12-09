@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const Category = require('../../models/productsCategory');
 
 //get all categories

@@ -1,4 +1,4 @@
-//import modules
+// Import Models
 const User = require("../../models/usersSchema");
 const emailSender = require("../../utils/emailSender");
 const jwt = require("jsonwebtoken");
@@ -46,7 +46,7 @@ const changePassword = async (req, res, next) => {
   }
 };
 
-//*export module
+//*export change password
 module.exports = changePassword;
 
 //end of change password...........................................................................................

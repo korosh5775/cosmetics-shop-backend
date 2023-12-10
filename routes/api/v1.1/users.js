@@ -1,10 +1,10 @@
-// Import modules
+// Import modules - authorization
 const express = require("express");
 const register = require("../../../controllers/userAuth/register");
 const login = require("../../../controllers/userAuth/login");
 const forgetPassword = require("../../../controllers/userAuth/forgetPassword");
 const changePassword = require("../../../controllers/userAuth/changePassword");
-
+// Import modules - products
 const batchedProducts = require("../../../controllers/user/getBatchOfProduct");
 const allProducts = require("../../../controllers/user/getAllProducts");
 

@@ -1,4 +1,4 @@
-// Import Models
+// Import modules
 const express = require("express");
 
 //*get router from express

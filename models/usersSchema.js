@@ -1,4 +1,4 @@
-// Import Models
+// Import Modules
 const mongoose = require("mongoose");
 
 //create schema

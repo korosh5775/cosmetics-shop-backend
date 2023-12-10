@@ -12,3 +12,5 @@ const newCategory = async (req, res, next) => {
     next(error);
   }
 };
+//export new category
+module.exports = newCategory;

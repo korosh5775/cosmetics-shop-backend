@@ -1,5 +1,7 @@
 // Import Modules
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
+
 
 //create Schema
 const productSchema = mongoose.Schema({
@@ -27,6 +29,7 @@ const productSchema = mongoose.Schema({
     ref: "ProductsCategory",
   },
 });
+productSchema.plugin(mongoosePaginate);
 
 //export schema
 module.exports = mongoose.model("Product", productSchema);

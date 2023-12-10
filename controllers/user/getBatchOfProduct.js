@@ -16,7 +16,7 @@ const getBatchOfProduct = async (req, res, next) => {
     //*find and pagination products with their category
     const allBatchedProducts = await Products.paginate({ category: categoryId }, options);
     //*send products to user with json
-    res.json(allBatchedProducts);
+    res.json(allBatchedProducts.docs);//* sending only the products without pagination data
   
   } catch (err) {
     next(err);

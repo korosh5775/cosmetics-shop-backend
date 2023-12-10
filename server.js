@@ -1,20 +1,21 @@
-// Import Models
-const express = require("express");
-const indexRoutes = require("./routes/index");
-const bodyParser = require("body-parser");
-require("dotenv").config();
-require("./utils/connection");
+//import core modules and application routes
+const express = require("express");            //* importing Express framework
+const indexRoutes = require("./routes/index"); // * importing main routes for the application
+const bodyParser = require("body-parser");     //* importing body parser middleware to parse request bodies
+require("dotenv").config(); //* load environment variables from .env file
+require("./utils/connection"); //* establish database connection
 
-//*initialize app by express
+//* initialize Express application instance
 const app = express();
 
-//*use body parser to working with data by json
+//* use bodyParser middleware to parse json requests
 app.use(bodyParser.json());
-//*call all http methodes
+
+///* set up root route
 app.use("/", indexRoutes);
 
-//*config port
-const port = process.env.PORT || 3000;
+//* configure the server port
+const port = process.env.PORT || 3000; //*use environment variable or default to 3000
 app.listen(port, () => {
   console.log(`app is running on ${port}`);
 });

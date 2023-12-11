@@ -3,9 +3,12 @@ const Products = require("../../models/productsSchema");
 
 const newProduct = async (req, res, next) => {
   try {
+    //* destructuring the product details from request body
     const { name, price, description, category } = req.body;
-    const image = `productImages/${req.file.filename}`;
+    //* constructing image file path with the uploaded filename from the request
+    const image = `${req.file.filename}`;
 
+    //* creating a new instance of the Products model with the received data
     const newProduct = new Products({
       name,
       price,
@@ -14,12 +17,16 @@ const newProduct = async (req, res, next) => {
       category,
     });
 
+    //* saving the new product to the database
     const savedProduct = await newProduct.save();
 
+    //* responding with a JSON containing the saved product data
     res.json(savedProduct);
   } catch (error) {
+    // Passing any errors to the next middleware for error handling
     next(error);
   }
 };
 
+// exports newProduct
 module.exports = newProduct;

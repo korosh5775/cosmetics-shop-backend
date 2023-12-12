@@ -15,7 +15,6 @@ const updateProduct = async (req, res, next) => {
       throw err;
     }
 
-    // استخراج مسیر تصویر فعلی
     const currentImagePath = path.join(
       __dirname,
       "..",
@@ -25,9 +24,8 @@ const updateProduct = async (req, res, next) => {
       product.image
     );
 
-    // حذف تصویر فعلی
     if (req.file && currentImagePath && fs.existsSync(currentImagePath)) {
-      fs.unlinkSync(currentImagePath); // اکنون از نسخه Sync استفاده می‌کنیم
+      fs.unlinkSync(currentImagePath); 
     }
 
     product.name = name  ?? product.name;
@@ -39,7 +37,6 @@ const updateProduct = async (req, res, next) => {
 
     console.log(product)
 
-    // به‌روزرسانی محصول و ذخیره تغییرات
     const updatedProduct = await product.save();
 
     res.status(200).json(updatedProduct);

@@ -7,6 +7,7 @@ const updateProduct = async (req, res, next) => {
   try {
     const { productId } = req.params;
     const { name, price, description, category } = req.body;
+    const image = `${req.file.filename}`;
     const product = await Products.findById(productId);
 
     if (!product) {
@@ -23,23 +24,27 @@ const updateProduct = async (req, res, next) => {
       "images",
       product.image
     );
+  
 
     if (req.file && currentImagePath && fs.existsSync(currentImagePath)) {
-      fs.unlinkSync(currentImagePath); 
+      fs.unlinkSync(currentImagePath);
     }
 
-    product.name = name  ?? product.name;
-    product.price = price ?? product.price;
-    product.description = description ?? product.description;
-    product.category = category ?? product.category;
-    product.image = req.file ? req.file.filename : product.image;
 
+    await Products.updateOne(
+      {_id:productId},
+      {
+        $set: {
+          name,
+          price,
+          description,
+          image,
+          category,
+        },
+      },
+    );
 
-    console.log(product)
-
-    const updatedProduct = await product.save();
-
-    res.status(200).json(updatedProduct);
+    res.status(200).json("prodact updated");
   } catch (err) {
     next(err);
   }

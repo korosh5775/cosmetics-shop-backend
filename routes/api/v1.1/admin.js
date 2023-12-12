@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/categories",authenticated, newCategory);
 router.post("/product",ImageUpload.single("image"), newProduct);
 router.delete("/remove/:productId", removeProduct);
-router.patch("/update/:productId", updateProduct);
+router.patch("/update/:productId",ImageUpload.single("image"), updateProduct);
 
  //exports router
 module.exports = router;

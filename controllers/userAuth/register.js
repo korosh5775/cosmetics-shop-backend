@@ -12,17 +12,6 @@ const register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 12); //*hash password for security
 
 
-    
-    /* //*checking user is exist or not
-    const userCheck = await User.findOne({ email });
-    if (userCheck) {
-      const err = new Error("این ایمیل از قبل موجود است");
-      err.statusCode = 422;
-      throw err;
-    } else { */
-
-
-
       //*create new user
       const user = new User({
         fullName,

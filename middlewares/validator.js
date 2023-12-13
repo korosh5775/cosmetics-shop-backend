@@ -61,9 +61,9 @@ const validated = async(req, res, next) => {
       const errorMessage = error.details
         .map((detail) => detail.message)
         .join(", ");
-      const error = new Error(errorMessage);
-      error.statusCode = 400;
-      throw error;
+      const err = new Error(errorMessage);
+      err.statusCode = 400;
+      throw err;
     }
 
     next();

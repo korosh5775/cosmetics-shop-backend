@@ -21,9 +21,9 @@ const newProduct = async (req, res, next) => {
     const savedProduct = await newProduct.save();
 
     //* responding with a JSON containing the saved product data
-    res.json(savedProduct);
+    res.status(201).json(savedProduct);
   } catch (error) {
-    // Passing any errors to the next middleware for error handling
+    //* passing any errors to the next middleware for error handling
     next(error);
   }
 };

@@ -46,7 +46,8 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+//end of change password...........................................................................................
+
 //*export change password
 module.exports = changePassword;
 
-//end of change password...........................................................................................

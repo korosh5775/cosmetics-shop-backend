@@ -52,7 +52,9 @@ const register = async (req, res, next) => {
   }
 };
 
+//end of register.........................................................................................
+
 //*export registerHandler
 module.exports = register;
 
-//end of register.........................................................................................
+

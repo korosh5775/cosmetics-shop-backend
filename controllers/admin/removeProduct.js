@@ -26,7 +26,7 @@ const removeProduct = async (req, res, next) => {
     );
     fs.unlink(imagePath, async (err) => {
       if (err) {
-        next(err); // Forward the error if unable to delete the image
+        next(err); //* forward the error if unable to delete the image
       } else {
         //* if the product image is successfully deleted, the product will be deleted
         await Products.findByIdAndDelete(productId);

@@ -39,8 +39,10 @@ const forgetPassword = async (req, res, next) => {
       next(err);
     }
   };
+
+  //end of forget password.........................................................................................
   
   //*export forget password
   module.exports = forgetPassword;
-  //end of forget password.........................................................................................
+  
   

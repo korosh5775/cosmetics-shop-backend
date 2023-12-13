@@ -1,5 +1,6 @@
 // Import modules - authorization
 const express = require("express");
+const validated = require('../../../middlewares/validator');
 const register = require("../../../controllers/userAuth/register");
 const login = require("../../../controllers/userAuth/login");
 const forgetPassword = require("../../../controllers/userAuth/forgetPassword");
@@ -12,7 +13,7 @@ const allProducts = require("../../../controllers/user/getAllProducts");
 const router = express.Router();
 
 //*handle http methods for user authorization
-router.post("/auth/register", register);
+router.post("/auth/register",validated, register);
 router.post("/auth/login", login);
 router.post("/auth/forget_password", forgetPassword);
 router.post("/auth/change_password/:token", changePassword);

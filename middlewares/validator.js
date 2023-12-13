@@ -12,30 +12,14 @@ const userValidation = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: ["com", "net"] } })
     .required()
-    .trim()
-    .external(async (value) => {
-      const user = await User.findOne({ email: value });
-      if (user) {
-        const error = new Error("this email is exists");
-        error.statusCode = 400;
-        throw error;
-      }
-    }),
+    .trim(),
 
   userName: Joi.string()
     .alphanum()
     .min(4)
     .max(64)
     .required()
-    .trim()
-    .external(async (value) => {
-      const user = await User.findOne({ userName: value });
-      if (user) {
-        const error = new Error("this userName is exists");
-        error.statusCode = 400;
-        throw error;
-      }
-    }),
+    .trim(),
 
   password: Joi.string()
     .min(8)
@@ -43,12 +27,12 @@ const userValidation = Joi.object({
           use of uppercase English letters,
           use of numbers,
           use of special characters
-          No blank spaces are accepted.
+          No blank spaces are accepted.*/
         .pattern(
           new RegExp(
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+-=])(?!.*\\s)$"
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=])(?!.*\s).{8,}$/
           )
-        )*/
+        )
     .required(),
 });
 const validated = async(req, res, next) => {

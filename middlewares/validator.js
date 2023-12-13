@@ -5,7 +5,7 @@ const userValidation = Joi.object({
     .min(4)
     .max(64)
     .required()
-    .pattern(new RegExp("^[A-Za-z\\s]+$"))
+    .pattern(new RegExp("^[A-Za-z\\s]+$")) //*use english letters and no blank space accepted
     .trim(),
 
   email: Joi.string()
@@ -44,7 +44,7 @@ const validated = async (req, res, next) => {
       throw err;
     }
 
-    next();
+    next();//* if everything was ok then save data to database
   } catch (error) {
     next(error);
   }

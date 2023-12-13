@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const User = require("../models/usersSchema");
 
 const userValidation = Joi.object({
   fullName: Joi.string()
@@ -14,12 +13,7 @@ const userValidation = Joi.object({
     .required()
     .trim(),
 
-  userName: Joi.string()
-    .alphanum()
-    .min(4)
-    .max(64)
-    .required()
-    .trim(),
+  userName: Joi.string().alphanum().min(4).max(64).required().trim(),
 
   password: Joi.string()
     .min(8)
@@ -28,16 +22,16 @@ const userValidation = Joi.object({
           use of numbers,
           use of special characters
           No blank spaces are accepted.*/
-        .pattern(
-          new RegExp(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=])(?!.*\s).{8,}$/
-          )
-        )
+    .pattern(
+      new RegExp(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=])(?!.*\s).{8,}$/
+      )
+    )
     .required(),
 });
-const validated = async(req, res, next) => {
+const validated = async (req, res, next) => {
   try {
-    const { error } =await userValidation.validateAsync(req.body, {
+    const { error } = await userValidation.validateAsync(req.body, {
       abortEarly: false,
     }); //* "abortEarly : false"=> It makes the program not stop after the first error and all input data is checked first.
 

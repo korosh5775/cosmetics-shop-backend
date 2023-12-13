@@ -51,9 +51,9 @@ const userValidation = Joi.object({
         )*/
     .required(),
 });
-const validated = (req, res, next) => {
+const validated = async(req, res, next) => {
   try {
-    const { error } = userValidation.validateAsync(req.body, {
+    const { error } =await userValidation.validateAsync(req.body, {
       abortEarly: false,
     }); //* "abortEarly : false"=> It makes the program not stop after the first error and all input data is checked first.
 

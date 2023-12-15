@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
   },
   isAdmin:{
     type: Boolean,
-    default: false
+    default: false//* we can change it to true from database
   }
 });
 

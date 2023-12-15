@@ -13,7 +13,7 @@ const userValidation = Joi.object({
     .required()
     .trim(),
 
-  userName: Joi.string().alphanum().min(4).max(64).required().trim().pattern(new RegExp("^[A-Za-z]+$")),
+  userName: Joi.string().alphanum().min(4).max(64).required().trim().pattern(new RegExp("^[A-Za-z1-9]+$")),
 
   password: Joi.string()
     .min(8)

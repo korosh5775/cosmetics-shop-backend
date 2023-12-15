@@ -23,6 +23,7 @@ const login = async (req, res, next) => {
         //* the user informations for token payload
         const user = {
           userId: userCheck._id.toString(),
+          isAdmin: userCheck.isAdmin,
           email: userCheck.email,
           userName: userCheck.userName,
         };

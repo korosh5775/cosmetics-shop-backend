@@ -23,6 +23,10 @@ const userSchema = mongoose.Schema({
     maxlength: 255,
     required: true,
   },
+  isAdmin:{
+    type: Boolean,
+    default: false
+  }
 });
 
 //export Schema

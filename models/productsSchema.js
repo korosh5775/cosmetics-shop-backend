@@ -4,7 +4,7 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 
 
 //create Schema
-const productSchema = mongoose.Schema({
+const ProductSchema = mongoose.Schema({
   image: {
     type: String,
     required: true,
@@ -29,7 +29,7 @@ const productSchema = mongoose.Schema({
     ref: "ProductsCategory",
   },
 });
-productSchema.plugin(mongoosePaginate);
+ProductSchema.plugin(mongoosePaginate);
 
 //export schema
-module.exports = mongoose.model("Product", productSchema);
+module.exports = mongoose.model("Product", ProductSchema);

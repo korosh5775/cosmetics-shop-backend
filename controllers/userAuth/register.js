@@ -1,7 +1,6 @@
 // Import Modules
 const User = require("../../models/usersSchema");
 const emailSender = require("../../utils/emailSender");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 //handle register..........................................................................................

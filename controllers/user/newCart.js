@@ -1,10 +1,17 @@
 //import moduls
 const Cart = require("../../models/cartSchema");
+const jwt = require('jsonwebtoken');
 
 const newCart = async (req, res, next) => {
   try {
-    const userId = req.body.user;
     const { items } = req.body;
+    const userId = req.userId;
+
+    if(!userId){
+      const err = new Error("please login first");
+      err.statusCode = 403; //*forbiden
+      throw err; //*throw error to catch
+    }
 
     //*find user's cart from database by userId
     let cart = await Cart.findOne({ user: userId });

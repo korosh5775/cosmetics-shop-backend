@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 const newCart = async (req, res, next) => {
   try {
     const { items } = req.body;
-    const userId = req.userId;
+    const userId = req.userId;//* get user Id from req object that sent from token(authorization method);
 
+    //* check if the user ID is found.
     if(!userId){
       const err = new Error("please login first");
       err.statusCode = 403; //*forbiden

@@ -1,6 +1,5 @@
 //import moduls
 const Cart = require("../../models/cartSchema");
-const jwt = require('jsonwebtoken');
 
 const newCart = async (req, res, next) => {
   try {
@@ -10,7 +9,7 @@ const newCart = async (req, res, next) => {
     //* check if the user ID is found.
     if(!userId){
       const err = new Error("please login first");
-      err.statusCode = 403; //*forbiden
+      err.statusCode = 401; //*not authenticated
       throw err; //*throw error to catch
     }
 

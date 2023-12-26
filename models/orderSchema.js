@@ -3,6 +3,10 @@ const mongoose = require("mongoose");
 
 //create Schema
 const orderSchema = mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   userName: {
     type: String,
     required: true,
@@ -15,22 +19,14 @@ const orderSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  items: [
-    {
-      cart: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Cart",
-      },
-    },
-  ],
+
+  cart: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Cart",
+  },
   totalPrice: Number,
 
-  off: String,
-
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
+  offCode: String,
 
   status: {
     type: String,

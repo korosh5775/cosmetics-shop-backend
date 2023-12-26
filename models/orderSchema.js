@@ -3,25 +3,34 @@ const mongoose = require("mongoose");
 
 //create Schema
 const orderSchema = mongoose.Schema({
+  userName: {
+    type: String,
+    required: true,
+  },
+  location: {
+    type: String,
+    required: true,
+  },
+  phone: {
+    type: Number,
+    required: true,
+  },
   items: [
     {
-      product: {
+      cart: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        ref: "Cart",
       },
-
-      quantity: Number,
-
-      price: Number,
     },
   ],
+  totalPrice: Number,
+
+  off: String,
 
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-
-  total: Number,
 
   status: {
     type: String,

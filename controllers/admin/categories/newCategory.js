@@ -1,5 +1,5 @@
 // Import Modules
-const Category = require("../../models/productsCategory");
+const Category = require("../../../models/categorySchema");
 
 const newCategory = async (req, res, next) => {
   try {

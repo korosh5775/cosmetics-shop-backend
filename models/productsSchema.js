@@ -26,7 +26,7 @@ const ProductSchema = mongoose.Schema({
   },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "ProductsCategory",
+    ref: "Category",
   },
 });
 ProductSchema.plugin(mongoosePaginate);

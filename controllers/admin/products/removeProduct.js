@@ -1,5 +1,5 @@
 // Import modules
-const Products = require("../../models/productsSchema");
+const Products = require("../../../models/productsSchema");
 const fs = require("fs");
 const path = require("path");
 

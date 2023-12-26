@@ -7,10 +7,11 @@ const authenticated = require("../../../middlewares/authorization");
 const isAdmin = require("../../../middlewares/isAdmin");
 
 // Import modules - products
-const newCategory = require("../../../controllers/admin/newCategory");
-const newProduct = require("../../../controllers/admin/newProduct");
-const removeProduct = require("../../../controllers/admin/removeProduct");
-const updateProduct = require("../../../controllers/admin/updateProduct");
+const newCategory = require("../../../controllers/admin/categories/newCategory");
+const newProduct = require("../../../controllers/admin/products/newProduct");
+const removeProduct = require("../../../controllers/admin/products/removeProduct");
+const removeCategory = require("../../../controllers/admin/categories/removeCategory");
+const updateProduct = require("../../../controllers/admin/products/updateProduct");
 
 //.................................................................................................................
 
@@ -27,6 +28,7 @@ router.post(
   newProduct
 );
 router.delete("/remove/:productId", authenticated, isAdmin, removeProduct);
+router.delete("/remove/:categoryId", authenticated, isAdmin, removeCategory);
 router.patch(
   "/update/:productId",
   ImageUpload.single("image"),

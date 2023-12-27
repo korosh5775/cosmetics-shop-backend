@@ -36,7 +36,7 @@ router.get("/allProducts", allProducts); //*this will be main page in frontend
 
 //*handle http methods for handle orders
 router.post("/addToCart", authenticated, newCart);
-router.post("/addToOreder", authenticated, newOrder);
+router.post("/addToOrder", authenticated, newOrder);
 
 //............................................................................................................
 

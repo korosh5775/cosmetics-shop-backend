@@ -1,5 +1,6 @@
 //this utility created for manage products quantity after creating an order
 //and it will use in new order
+const Product = require('../models/productsSchema');
 exports.pqcontrol = async(cart)=>{
     for (let item of cart.items) {
     //* fetch the product to get the current price

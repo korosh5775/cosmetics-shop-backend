@@ -1,50 +1,69 @@
-//import moduls
+//import modules
 const Cart = require("../../models/cartSchema");
+const Product = require("../../models/productsSchema");
 
 const newCart = async (req, res, next) => {
   try {
     const { items } = req.body;
-    const userId = req.userId;//* get user Id from req object that sent from token(authorization method);
+    const userId = req.userId; // get user Id from req object that sent from token (authorization method);
 
-    //* check if the user ID is found.
-    if(!userId){
-      const err = new Error("please login first");
-      err.statusCode = 401; //*not authenticated
-      throw err; //*throw error to catch
+    // check if the user ID is found.
+    if (!userId) {
+      const err = new Error("Please login first");
+      err.statusCode = 401; // not authenticated
+      throw err; // throw error to catch
     }
 
-    //*find user's cart from database by userId
+    //find user's cart from database by userId
     let cart = await Cart.findOne({ user: userId });
 
-    //* it is checked whether the user already had items in the shopping cart or not.
+    // checking the stock before adding items to the cart
+    for (const item of items) {
+      const product = await Product.findById(item.product);
+      if (!product) {
+        const err = new Error(`Product with ID ${item.product} not found`);
+        err.statusCode = 404;//* not found
+        throw err;
+      }
+      //* checks that the ordered goods are not more than the ones in the database.
+      if (item.quantity > product.quantity) {
+        const err = new Error(`Not enough stock for ${product.name}`);
+        err.statusCode = 400; //* bad request
+        throw err;
+      }
+      
+    }
+
+    // if user already had a cart...
     if (cart) {
-      //* checks if the new item added to the shopping cart was already available or not.
-      //* this operation is performed using a forEach loop, in which all the products in the shopping cart are compared with the new product.
-      items.forEach((item) => {
-        const existingItem = cart.items.find(
-          (ci) => ci.product.toString() === item.product //*we used .toString to change objectId to String
+      // checks if the new item added to the shopping cart was already available or not.
+      items.forEach((newItem) => {
+        let existingItem = cart.items.find(
+          (cartItem) => cartItem.product.toString() === newItem.product // comparison after converting ObjectId to String
         );
-        //* if a similar product is found, the number of the new order will be adjusted to the number of the previous order of the product.
+
         if (existingItem) {
-          existingItem.quantity += item.quantity;
+          existingItem.quantity += newItem.quantity;
         } else {
-          //* if a similar product is not found, add the new order to other orders
-          cart.items.push(item);
+          // if similar product is not found, add the new item to the cart
+          cart.items.push(newItem);
         }
       });
     } else {
-      //* if the shopping cart was empty
+      // if the shopping cart was empty, create a new cart with the items
       cart = new Cart({
         user: userId,
         items,
       });
     }
-    //* save new cart to database
+
+    // save new or updated cart to database
     const savedCart = await cart.save();
     res.status(201).json(savedCart);
   } catch (error) {
-    next(error);
+    next(error); // Make sure to handle the thrown errors in your error handling middleware
   }
 };
+
 //export new cart
 module.exports = newCart;

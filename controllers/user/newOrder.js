@@ -54,10 +54,13 @@ const newOrder = async (req, res, next) => {
       offCode,
     });
 
+    //*decrease the quantity of products after created new order
+    //*and it will checks that the quantity of the ordered product is not more than the stock
+    await pqcontrol(cart);
+
     //*saving new order in database
     await order.save();
-    //*decrease the quantity of products after created new order
-    await pqcontrol(cart);
+    
     //*remove cart after created new order
     await Cart.deleteMany({ _id: cartId });
     

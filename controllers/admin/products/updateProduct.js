@@ -6,7 +6,7 @@ const path = require("path");
 const updateProduct = async (req, res, next) => {
   try {
     const { productId } = req.params;
-    const { name, price, description, category } = req.body;
+    const { name, price, description,quantity, category } = req.body;
     const image = `${req.file.filename}`;
 
     //*finding the product to check if it exists
@@ -45,6 +45,7 @@ const updateProduct = async (req, res, next) => {
           name,
           price,
           description,
+          quantity,
           image,
           category,
         },

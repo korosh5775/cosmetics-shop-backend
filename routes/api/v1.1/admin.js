@@ -7,6 +7,7 @@ const authenticated = require("../../../middlewares/authorization");
 const isAdmin = require("../../../middlewares/isAdmin");
 
 // Import modules - products
+const getProduct = require('../../../controllers/admin/products/getProduct');
 const newCategory = require("../../../controllers/admin/categories/newCategory");
 const newProduct = require("../../../controllers/admin/products/newProduct");
 const removeProduct = require("../../../controllers/admin/products/removeProduct");
@@ -19,6 +20,7 @@ const updateProduct = require("../../../controllers/admin/products/updateProduct
 const router = express.Router();
 
 //*handle http methods for admin controller
+router.get("/product/:productId",getProduct);
 router.post("/categories", authenticated, isAdmin, newCategory);
 router.post(
   "/product",

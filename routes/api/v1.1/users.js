@@ -17,6 +17,7 @@ const allProducts = require("../../../controllers/user/getAllProducts");
 
 //Import modules - order
 const newCart = require("../../../controllers/user/newCart");
+const newOrder = require("../../../controllers/user/newOrder");
 
 //.........................................................................................................
 
@@ -35,6 +36,7 @@ router.get("/allProducts", allProducts); //*this will be main page in frontend
 
 //*handle http methods for handle orders
 router.post("/addToCart", authenticated, newCart);
+router.post("/addToOreder", authenticated, newOrder);
 
 //............................................................................................................
 

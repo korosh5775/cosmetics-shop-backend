@@ -4,7 +4,7 @@ const Products = require("../../../models/productsSchema");
 const newProduct = async (req, res, next) => {
   try {
     //* destructuring the product details from request body
-    const { name, price, description, category } = req.body;
+    const { name, price, description,quantity, category } = req.body;
     //* constructing image file path with the uploaded filename from the request
     const image = `${req.file.filename}`;
 
@@ -13,6 +13,7 @@ const newProduct = async (req, res, next) => {
       name,
       price,
       description,
+      quantity,
       image,
       category,
     });

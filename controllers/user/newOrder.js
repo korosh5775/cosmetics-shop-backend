@@ -2,6 +2,7 @@
 const Order = require("../../models/orderSchema");
 const Cart = require("../../models/cartSchema");
 const Product = require("../../models/productsSchema");
+const {pqcontrol} = require('../../utils/productQuantityControler');
 
 const newOrder = async (req, res, next) => {
   try {
@@ -55,8 +56,11 @@ const newOrder = async (req, res, next) => {
 
     //*saving new order in database
     await order.save();
+    //*decrease the quantity of products after created new order
+    await pqcontrol(cart);
+    //*remove cart after created new order
     await Cart.deleteMany({ _id: cartId });
-
+    
     //*sending successfully message
     res
       .status(200)

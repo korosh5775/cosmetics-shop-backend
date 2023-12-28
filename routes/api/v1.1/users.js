@@ -6,18 +6,18 @@ const validated = require("../../../middlewares/validator");
 const authenticated = require("../../../middlewares/authorization");
 
 // Import modules - authorization
-const register = require("../../../controllers/userAuth/register");
-const login = require("../../../controllers/userAuth/login");
-const forgetPassword = require("../../../controllers/userAuth/forgetPassword");
-const changePassword = require("../../../controllers/userAuth/changePassword");
+const register = require("../../../controllers/user/userAuth/register");
+const login = require("../../../controllers/user/userAuth/login");
+const forgetPassword = require("../../../controllers/user/userAuth/forgetPassword");
+const changePassword = require("../../../controllers/user/userAuth/changePassword");
 
 // Import modules - products
-const batchedProducts = require("../../../controllers/user/getBatchOfProduct");
-const allProducts = require("../../../controllers/user/getAllProducts");
+const batchedProducts = require("../../../controllers/user/products/getBatchOfProduct");
+const allProducts = require("../../../controllers/user/products/getAllProducts");
 
 //Import modules - order
-const newCart = require("../../../controllers/user/newCart");
-const newOrder = require("../../../controllers/user/newOrder");
+const newCart = require("../../../controllers/user/cart/newCart");
+const newOrder = require("../../../controllers/user/order/newOrder"); 
 
 //.........................................................................................................
 

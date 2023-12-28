@@ -32,6 +32,4 @@ const CartSchema = mongoose.Schema({
     default: Date.now,
   },
 });
-
-const cart = mongoose.model("Cart", CartSchema);
-module.exports = cart;
+ module.exports= mongoose.model("Cart", CartSchema);

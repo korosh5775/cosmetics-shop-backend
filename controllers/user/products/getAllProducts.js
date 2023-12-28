@@ -1,6 +1,6 @@
 // Import Modules
-const Products = require("../../models/productsSchema");
-const ProductsCategories = require("../../models/categorySchema");
+const Products = require("../../../models/productsSchema");
+const ProductsCategories = require("../../../models/categorySchema");
 
 const getAllProducts = async (req, res, next) => {
   try {

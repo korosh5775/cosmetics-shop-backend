@@ -1,6 +1,6 @@
 //import modules
-const Cart = require("../../models/cartSchema");
-const Product = require("../../models/productsSchema");
+const Cart = require("../../../models/cartSchema");
+const Product = require("../../../models/productsSchema");
 
 const newCart = async (req, res, next) => {
   try {

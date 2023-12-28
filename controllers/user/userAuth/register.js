@@ -1,6 +1,6 @@
 // Import Modules
-const User = require("../../models/usersSchema");
-const emailSender = require("../../utils/emailSender");
+const User = require("../../../models/usersSchema");
+const emailSender = require("../../../utils/emailSender");
 const bcrypt = require("bcryptjs");
 
 //handle register..........................................................................................

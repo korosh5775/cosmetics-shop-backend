@@ -1,8 +1,8 @@
 //Import modules
-const Order = require("../../models/orderSchema");
-const Cart = require("../../models/cartSchema");
-const Product = require("../../models/productsSchema");
-const { pqcontrol } = require("../../utils/productQuantityControler");
+const Order = require("../../../models/orderSchema");
+const Cart = require("../../../models/cartSchema");
+const Product = require("../../../models/productsSchema");
+const { pqcontrol } = require("../../../utils/productQuantityControler");
 
 const newOrder = async (req, res, next) => {
   try {

@@ -6,7 +6,7 @@ const updateCategory = async (req, res, next) => {
     const { categoryId } = req.params;
     const { name } = req.body;
     //*finding the category from database
-    const category = await Category.findById({ categoryId });
+    const category = await Category.findById( categoryId );
 
     //* checking if category exists
     if (!category) {

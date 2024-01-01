@@ -5,7 +5,7 @@ const getProduct = async (req, res, next) => {
   try {
     //*getting product id from params
     const { productId } = req.params;
-    const product = await Product.findById({ productId });
+    const product = await Product.findById( productId );
     //* checking product availability on the server.
     if (!product) {
       const err = new Error("there is no product");

@@ -12,12 +12,14 @@ const forgetPassword = require("../../../controllers/user/userAuth/forgetPasswor
 const changePassword = require("../../../controllers/user/userAuth/changePassword");
 
 // Import modules - products
+const getProduct = require('../../../controllers/user/products/getProduct');
 const batchedProducts = require("../../../controllers/user/products/getBatchOfProduct");
-const allProducts = require("../../../controllers/user/products/getAllProducts");
+const allProducts = require("../../../controllers/user/products/getOneAllProducts");
 
 //Import modules - order
 const newCart = require("../../../controllers/user/cart/newCart");
 const newOrder = require("../../../controllers/user/order/newOrder"); 
+const getOrders = require("../../../controllers/user/order/getOrders"); 
 
 //.........................................................................................................
 
@@ -31,12 +33,14 @@ router.post("/auth/forget_password", forgetPassword);
 router.post("/auth/change_password/:token", changePassword);
 
 //*handle http methods for product's datas
-router.get("/BatchedProducts/:categoryId", batchedProducts);
-router.get("/allProducts", allProducts); //*this will be main page in frontend
+router.get("/product/:productId",getProduct);
+router.get("/batched-products/:categoryId", batchedProducts);
+router.get("/all-products", allProducts); //*this will be main page in frontend
 
 //*handle http methods for handle orders
-router.post("/addToCart", authenticated, newCart);
-router.post("/addToOrder", authenticated, newOrder);
+router.post("/add-to-cart", authenticated, newCart);
+router.post("/add-to-order", authenticated, newOrder);
+router.get("/get-orders", authenticated, getOrders);
 
 //............................................................................................................
 

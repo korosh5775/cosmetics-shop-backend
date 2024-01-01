@@ -20,6 +20,7 @@ const removeProduct = async (req, res, next) => {
       __dirname,
       "..",
       "..",
+      "..",
       "public",
       "images",
       product.image

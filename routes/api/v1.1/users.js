@@ -38,9 +38,9 @@ router.get("/batched-products/:categoryId", batchedProducts);
 router.get("/all-products", allProducts); //*this will be main page in frontend
 
 //*handle http methods for handle orders
-router.post("/add-to-cart", authenticated, newCart);
+router.post("/add-to-cart",authenticated,  newCart);
 router.post("/add-to-order", authenticated, newOrder);
-router.get("/get-orders", authenticated, getOrders);
+router.get("/get-orders", authenticated,authenticated, getOrders);
 
 //............................................................................................................
 

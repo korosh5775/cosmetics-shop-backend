@@ -17,6 +17,9 @@ const newCategory = require("../../../controllers/admin/categories/newCategory")
 const updateCategory = require('../../../controllers/admin/categories/updateCategory');
 const removeCategory = require("../../../controllers/admin/categories/removeCategory");
 
+// Import modules - orders
+const newOffCode = require("../../../controllers/admin/orders/offCodes");
+
 //.................................................................................................................
 
 //*get router from express
@@ -25,7 +28,7 @@ const router = express.Router();
 
 //*handle http methods for admin controller - categories
 router.get("/categories/fetch-data", authenticated, isAdmin, getAllCategories)
-router.post("/categories/new", authenticated, isAdmin, newCategory);
+router.post("/categories/new",  newCategory);
 router.patch("/categories/update/:categoryId", authenticated, isAdmin, updateCategory);
 router.delete("/categories/remove/:categoryId", authenticated, isAdmin, removeCategory);
 
@@ -33,8 +36,6 @@ router.delete("/categories/remove/:categoryId", authenticated, isAdmin, removeCa
 router.post(
   "/products/new",
   ImageUpload.single("image"),
-  authenticated,
-  isAdmin,
   newProduct
 );
 router.patch(
@@ -45,6 +46,12 @@ router.patch(
   updateProduct
 );
 router.delete("/products/remove/:productId", authenticated, isAdmin, removeProduct);
+
+//*handle http methods for admin controller - orders
+router.post(
+  "/orders/new-off-code",
+  newOffCode
+);
 
 
 //................................................................................................................

@@ -28,7 +28,7 @@ const createOffCode = async (req, res, next) => {
     }
 
     //* Check for start date validity
-    if (new Date(startDate) < new Date()) {
+    if (new Date(startDate) <= new Date()) {
       const err = new Error("The start date cannot be in the past.");
       err.statusCode = 422; //* unprocessable Entity
       throw err;

@@ -1,5 +1,8 @@
+// Import the Joi validation library
+// ------------------------------------------------
 const Joi = require("joi");
-
+// Define the user validation schema
+// ------------------------------------------------
 const userValidation = Joi.object({
   fullName: Joi.string()
     .min(4)
@@ -29,12 +32,20 @@ const userValidation = Joi.object({
     )
     .required(),
 });
+
+// Define the validated middleware function
+// ------------------------------------------------
 const validated = async (req, res, next) => {
   try {
+    // Validate the user data against the schema
+    // ------------------------------------------------
     const { error } = await userValidation.validateAsync(req.body, {
       abortEarly: false,
     }); //* "abortEarly : false"=> It makes the program not stop after the first error and all input data is checked first.
 
+    
+   // Handle validation errors
+   // ------------------------------------------------
     if (error) {
       const errorMessage = error.details
         .map((detail) => detail.message)
@@ -44,10 +55,16 @@ const validated = async (req, res, next) => {
       throw err;
     }
 
-    next();//* if everything was ok then save data to database
+   // Proceed to the next middleware/route if validation passes
+   // ------------------------------------------------
+    next();
   } catch (error) {
+    // Pass errors to error handling middleware
+    // ------------------------------------------------
     next(error);
   }
 };
 
+// Export the validated middleware
+// ------------------------------------------------
 module.exports = validated;

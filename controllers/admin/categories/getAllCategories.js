@@ -1,14 +1,23 @@
-// Import Modules
+// Import necessary modules
+// ------------------------------------------------
 const Category = require('../../../models/categorySchema');
 
-//get all categories
+// Define the getCategories function
+// ------------------------------------------------
 const getCategories = async (req, res) => {
   try {
+    // Get all categories from the database
+    // ------------------------------------------------
     const categories = await Category.find();
+
+    // Send a response with the categories
+    // ------------------------------------------------
     res.json(categories);
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
-//export moduls
+
+// Export the getCategories function
+// ------------------------------------------------
 module.exports = getCategories;

@@ -1,48 +1,59 @@
-// Import Modules
+// Import necessary modules
+// ------------------------------------------------
 const User = require("../../../models/usersSchema");
 const emailSender = require("../../../utils/emailSender");
 const jwt = require("jsonwebtoken");
 
-//handle forget password...................................................................................
+// Define the forgetPassword function
+// ------------------------------------------------
 const forgetPassword = async (req, res, next) => {
-    try {
-      const { email } = req.body; //*get email from user
-  
-      const user = await User.findOne({ email }); //*checking the database to see if the email exists or not
-  
-      if (!user) {
-        //* if user dos not exist
-        const err = new Error("کاربری با این ایمیل یافت نشد.");
-        err.statusCode = 404;
-        throw err;
-      }
-  
-      //*create a token that carries userId and email gives the user access to change his password and expire link after certain period of time
-      const token = await jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-  
-      //*putting the token after the change password url
-      const change_password = `http://localhost:8000/user/change_password/${token}`;
-  
-      //*send change password link to user by email
-      emailSender(
-        email,
-        "تغییر رمز عبور",
-        `جهت تغییر رمز عبور روی لینک زیر کلیک کنید \n ${change_password} \n این لینک تا یک ساعت دیگر معتبر است.`
-      );
-  
-      res
-        .status(200)
-        .json({ message: "جهت بازیابی کلمه عبور به ایمیل خود مراجعه کنید" });
-    } catch (err) {
-      next(err);
-    }
-  };
+ try {
+   // Extract the email from the request body
+   // ------------------------------------------------
+   const { email } = req.body;
 
-  //end of forget password.........................................................................................
-  
-  //*export forget password
-  module.exports = forgetPassword;
-  
-  
+   // Find the user with the provided email
+   // ------------------------------------------------
+   const user = await User.findOne({ email });
+
+   // Handle user not found
+   // ------------------------------------------------
+   if (!user) {
+     const err = new Error("User with this email was not found");
+     err.statusCode = 404; // Not Found status code
+     throw err; // Throw the error for handling
+   }
+
+   // Generate a JWT token with user ID and email, expiring in 1 hour
+   // ------------------------------------------------
+   const token = await jwt.sign(
+     { userId: user._id, email: user.email },
+     process.env.JWT_SECRET,
+     { expiresIn: "1h" }
+   );
+
+   // Construct the password reset link with the token
+   // ------------------------------------------------
+   const changePasswordUrl = `http://localhost:8000/user/change_password/${token}`;
+
+   // Send an email with the password reset link
+   // ------------------------------------------------
+   emailSender(
+     email,
+     "تغییر رمز عبور",
+     `جهت تغییر رمز عبور روی لینک زیر کلیک کنید \n ${changePasswordUrl} \n این لینک تا یک ساعت دیگر معتبر است.`
+   );
+
+   // Send a success response to the client
+   // ------------------------------------------------
+   res.status(200).json({ message: "Go to your email to recover your password" });
+ } catch (err) {
+   // Pass errors to error handling middleware
+   // ------------------------------------------------
+   next(err);
+ }
+};
+
+// Export the forgetPassword function
+// ------------------------------------------------
+module.exports = forgetPassword;

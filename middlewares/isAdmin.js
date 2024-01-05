@@ -1,31 +1,43 @@
-// import modules
+// Import necessary module
+// ------------------------------------------------
 const jwt = require("jsonwebtoken");
 
+// Define the isAdmin middleware function
+// ------------------------------------------------
 const isAdmin = (req, res, next) => {
-  try {
-    //* retrieve the Authorization header from the incoming request
-    const authHeader = req.get("Authorization");
+ try {
+   // Extract the Authorization header from the request
+   // ------------------------------------------------
+   const authHeader = req.get("Authorization");
 
-    //* authHeader is "Bearer" and " "(space) and token, like: "Bearer jkdhvkjdasvdslvniudsunvjbasdvbhvv"
-    //* authHeader.split(" ") return an array like this:["Bearer","jkdhvkjdasvdslvniudsunvjbasdvbhvv"]
-    //* and we use .split(" ")[1] to separate the index 1 from it.this will return token
-    const token = authHeader.split(" ")[1];
+   // Extract the token from the Authorization header
+   // ------------------------------------------------
+   const token = authHeader.split(" ")[1]; // Assuming "Bearer" token format
 
-    //* verify the token using the secret key and if invalid, block the request with a 401 unauthorized status
-    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+   // Verify the token using the secret key
+   // ------------------------------------------------
+   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    //* get the isAdmin value from the token and check if it is true, to allow the user to create, update, or delete data.
-    if (decodedToken.isAdmin) {
-      next(); //* if isAdmin was true, it allows the next function to run
-    } else {
-      //*if isAdmin was false return an error
-      const err = new Error("You are not an admin");
-      err.statusCode = 403; //*forbiden
-      throw err;
-    }
-  } catch (error) {
-    next(error);
-  }
+   // Check if the user is an admin based on the decoded token
+   // ------------------------------------------------
+   if (decodedToken.isAdmin) {
+     // Allow the request to proceed if the user is an admin
+     // ------------------------------------------------
+     next();
+   } else {
+     // Deny access with a Forbidden error if the user is not an admin
+     // ------------------------------------------------
+     const err = new Error("You are not an admin"); // Error message
+     err.statusCode = 403; // Forbidden status code
+     throw err; // Throw the error for handling
+   }
+ } catch (err) {
+   // Pass errors to error handling middleware
+   // ------------------------------------------------
+   next(err);
+ }
 };
-//*exports isAdmin
+
+// Export the isAdmin middleware
+// ------------------------------------------------
 module.exports = isAdmin;

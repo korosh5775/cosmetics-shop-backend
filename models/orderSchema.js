@@ -1,4 +1,5 @@
-// Import Modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require("mongoose");
 
 const OrderItemSchema = mongoose.Schema({
@@ -48,4 +49,6 @@ const OrderSchema = mongoose.Schema({
   },
 });
 
+// Export the Order model
+// ------------------------------------------------
 module.exports = mongoose.model("Order", OrderSchema);

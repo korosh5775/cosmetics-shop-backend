@@ -1,41 +1,69 @@
-// import modules
+// Import modules
+// ------------------------------------------------
 const Comments = require("../../../models/commentsSchema");
-const Oredr = require('../../../models/orderSchema');
+const Order = require('../../../models/orderSchema');  
 
+// Define the newComment function
+// ------------------------------------------------
 const newComment = async (req, res, next) => {
-  try {
-    const { comment, rate } = req.body;
-    const { productId } = req.params;
-    const user = req.userId;
-    const productExists = await Product.findById(productId);
-    if (!productExists) {
-      const err = new Error("the product dos not fount");
-      err.statusCode = 404; //* not found
-      throw err;
-    }
+ try {
+   // Extract data from request
+   // ------------------------------------------------
+   const { comment, rate } = req.body;
+   const { productId } = req.params;
+   const user = req.userId;
 
-    const userHasPurchased = await Order.findOne({
-        user: userId,
-        'items.product': productId
-      });
-  
-      if (!userHasPurchased) {
-        return res.status(403).json({ message: 'شما نمی‌توانید برای محصولی که خریداری نکرده‌اید نظر دهید.' });
-      }
-    const newComment = new Comments({
-      user,
-      product: productId,
-      comment,
-      rate,
-    });
+   // Check if the product exists
+   // ------------------------------------------------
+   const productExists = await Product.findById(productId);
+   if (!productExists) {
+     const err = new Error("The product dos not fount"); 
+     err.statusCode = 404; // Not found
+     throw err;
+   }
 
-    const savedComment = await newComment.save();
+   // Validate the rate value
+   // ------------------------------------------------
+   if (rate < 1 || rate > 5) {
+     const err = new Error("Rate number must be between 1 and 5");
+     err.statusCode = 400; // Bad request
+     throw err;
+   }
 
-    res.status(201).json(savedComment);
-  } catch (error) {
-    next(error);
-  }
+   // Check if the user has purchased the product
+   // ------------------------------------------------
+   const userHasPurchased = await Order.findOne({
+     user: userId,
+     'items.product': productId
+   });
+
+   if (!userHasPurchased) {
+     const err = new Error("Please purchase the product first.");
+     err.statusCode = 403; // Forbidden
+     throw err;
+   }
+
+   // Create a new comment
+   // ------------------------------------------------
+   const newComment = new Comments({
+     user,
+     product: productId,
+     comment,
+     rate,
+   });
+
+   // Save the comment to the database
+   // ------------------------------------------------
+   const savedComment = await newComment.save();
+
+   // Send a success response with the saved comment
+   // ------------------------------------------------
+   res.status(201).json(savedComment);
+ } catch (error) {
+   next(error);
+ }
 };
 
-//export new comment
+// Export the newComment function
+// ------------------------------------------------
 module.exports = newComment;

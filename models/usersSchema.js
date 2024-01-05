@@ -1,4 +1,5 @@
-// Import Modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require("mongoose");
 
 //create schema
@@ -29,5 +30,6 @@ const UserSchema = mongoose.Schema({
   }
 });
 
-//export Schema
+// Export the User model
+// ------------------------------------------------
 module.exports = mongoose.model("User", UserSchema);

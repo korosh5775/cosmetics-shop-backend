@@ -1,4 +1,5 @@
-//import modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require("mongoose");
 
 const OffCodeSchema = mongoose.Schema({
@@ -32,6 +33,7 @@ const OffCodeSchema = mongoose.Schema({
   },
 });
 
-//export schema
+// Export the OffCode model
+// ------------------------------------------------
 module.exports = mongoose.model("OffCode", OffCodeSchema);
 

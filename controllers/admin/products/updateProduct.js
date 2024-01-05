@@ -1,62 +1,72 @@
-// Import modules
+// Import necessary modules
+// ------------------------------------------------
 const Products = require("../../../models/productsSchema");
 const fs = require("fs");
 const path = require("path");
 
+// Define the updateProduct function
+// ------------------------------------------------
 const updateProduct = async (req, res, next) => {
-  try {
-    const { productId } = req.params;
-    const { name, price, description,quantity, category } = req.body;
-    const image = `${req.file.filename}`;
+ try {
+   // Extract product ID and updated details from request
+   // ------------------------------------------------
+   const { productId } = req.params;
+   const { name, price, description, quantity, category } = req.body;
+   const image = `${req.file.filename}`;
 
-    //*finding the product to check if it exists
-    const product = await Products.findById(productId);
+   // Find the product to update
+   // ------------------------------------------------
+   const product = await Products.findById(productId);
 
-    //* checking if product exists
-    if (!product) {
-      const err = new Error("Product not found.");
-      err.statusCode = 404; //* not found
-      throw err;
-    }
+   // Check if the product exists
+   // ------------------------------------------------
+   if (!product) {
+     const err = new Error("Product not found.");
+     err.statusCode = 404; // Not found
+     throw err;
+   }
 
-    //*finding current image path
-    const currentImagePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "public",
-      "images",
-      product.image
-    );
+   // Handle image deletion if a new image is uploaded
+   // ------------------------------------------------
+   const currentImagePath = path.join(
+     __dirname,
+     "..",
+     "..",
+     "public",
+     "images",
+     product.image
+   );
 
-    /*if a requested file (req.file) exists,
-     as well as the current image path (currentImagePath),
-      and there exists a file at that path (fs.existsSync(currentImagePath))
-      then remove that image*/
-    if (req.file && currentImagePath && fs.existsSync(currentImagePath)) {
-      fs.unlinkSync(currentImagePath);
-    }
+   if (req.file && currentImagePath && fs.existsSync(currentImagePath)) {
+     fs.unlinkSync(currentImagePath); // Delete the old image
+   }
 
-    //* updating product with new details
-    await Products.updateOne(
-      { _id: productId },
-      {
-        $set: { //* we using the $set operator to change old data with new data
-          name,
-          price,
-          description,
-          quantity,
-          image,
-          category,
-        },
-      }
-    );
+   // Update the product in the database
+   // ------------------------------------------------
+   await Products.updateOne(
+     { _id: productId },
+     {
+       $set: { // Use $set operator to update specific fields
+         name,
+         price,
+         description,
+         quantity,
+         image,
+         category,
+       },
+     }
+   );
 
-    res.status(200).json("prodact updated");
-  } catch (err) {
-    next(err);
-  }
+   // Send a success response
+   // ------------------------------------------------
+   res.status(200).json("Product updated");
+ } catch (err) {
+   // Handle errors
+   // ------------------------------------------------
+   next(err);
+ }
 };
 
-// Export updateProduct
+// Export the updateProduct function
+// ------------------------------------------------
 module.exports = updateProduct;

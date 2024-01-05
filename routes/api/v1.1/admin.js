@@ -1,60 +1,65 @@
-// Import modules
+// Import necessary modules
+// ------------------------------------------------
 const express = require("express");
 
-// Import modules - middlewares
-const ImageUpload = require("../../../utils/multer");
-const authenticated = require("../../../middlewares/authorization");
-const isAdmin = require("../../../middlewares/isAdmin");
+// Import middlewares
+// ------------------------------------------------
+const ImageUpload = require("../../../utils/multer"); // Image upload handling
+const authenticated = require("../../../middlewares/authorization"); // Authentication middleware
+const isAdmin = require("../../../middlewares/isAdmin"); // Admin authorization middleware
 
-// Import modules - products
+// Import controllers for products
+// ------------------------------------------------
 const newProduct = require("../../../controllers/admin/products/newProduct");
 const removeProduct = require("../../../controllers/admin/products/removeProduct");
 const updateProduct = require("../../../controllers/admin/products/updateProduct");
 
-// Import modules - categories
-const getAllCategories = require('../../../controllers/admin/categories/getAllCategories');
+// Import controllers for categories
+// ------------------------------------------------
+const getAllCategories = require("../../../controllers/admin/categories/getAllCategories");
 const newCategory = require("../../../controllers/admin/categories/newCategory");
-const updateCategory = require('../../../controllers/admin/categories/updateCategory');
+const updateCategory = require("../../../controllers/admin/categories/updateCategory");
 const removeCategory = require("../../../controllers/admin/categories/removeCategory");
 
-// Import modules - orders
+// Import controllers for orders
+// ------------------------------------------------
 const newOffCode = require("../../../controllers/admin/orders/offCodes");
 
-//.................................................................................................................
+//? ......................................................................................................
 
-//*get router from express
+// Create an Express router
+// ------------------------------------------------
 const router = express.Router();
 
+//? ......................................................................................................
 
-//*handle http methods for admin controller - categories
-router.get("/categories/fetch-data", authenticated, isAdmin, getAllCategories)
-router.post("/categories/new",  newCategory);
-router.patch("/categories/update/:categoryId", authenticated, isAdmin, updateCategory);
-router.delete("/categories/remove/:categoryId", authenticated, isAdmin, removeCategory);
+// Define routes for admin categories
+// ------------------------------------------------
+router.get("/categories/fetch-data", authenticated, isAdmin, getAllCategories); // Get all categories
+router.post("/categories/new", newCategory); // Create a new category
+router.patch("/categories/update/:categoryId", authenticated, isAdmin, updateCategory); // Update a category
+router.delete("/categories/remove/:categoryId", authenticated, isAdmin, removeCategory); // Delete a category
 
-//*handle http methods for admin controller - products
+// Define routes for admin products
+// ------------------------------------------------
 router.post(
   "/products/new",
-  ImageUpload.single("image"),
+  ImageUpload.single("image"), // Handle image upload
   newProduct
-);
+); // Create a new product
 router.patch(
   "/products/update/:productId",
-  ImageUpload.single("image"),
+  ImageUpload.single("image"), // Handle image upload
   authenticated,
   isAdmin,
   updateProduct
-);
-router.delete("/products/remove/:productId", authenticated, isAdmin, removeProduct);
+); // Update a product
+router.delete("/products/remove/:productId", authenticated, isAdmin, removeProduct); // Delete a product
 
-//*handle http methods for admin controller - orders
-router.post(
-  "/orders/new-off-code",
-  newOffCode
-);
+// Define routes for admin orders
+// ------------------------------------------------
+router.post("/orders/new-off-code", newOffCode); // Create a new discount code
 
-
-//................................................................................................................
-
-//exports router
+// Export the router
+// ------------------------------------------------
 module.exports = router;

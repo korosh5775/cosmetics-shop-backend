@@ -1,16 +1,21 @@
-// Import modules
-const express = require("express");
+// Import necessary modules
+// ------------------------------------------------
+const express = require("express"); // Express framework
 
-//*get router from express
+// Create an Express router
+// ------------------------------------------------
 const router = express.Router();
 
-//*versions of users
-const usersV_1_1 = require("./api/v1.1/users");
-router.use("/v1.1/users", usersV_1_1);
+// Define routes for users v1.1
+// ------------------------------------------------
+const usersV_1_1 = require("./api/v1.1/users"); // Import the users v1.1 module
+router.use("/v1.1/users", usersV_1_1); // Map the /v1.1/users route to the usersV_1_1 module
 
-//*versions of admin
-const adminV1_1 = require('./api/v1.1/admin');
-router.use("/v1.1/admin",adminV1_1);
+// Define routes for admin v1.1
+// ------------------------------------------------
+const adminV1_1 = require('./api/v1.1/admin'); // Import the admin v1.1 module
+router.use("/v1.1/admin",adminV1_1); // Map the /v1.1/admin route to the adminV1_1 module
 
-//*export router
+// Export the router
+// ------------------------------------------------
 module.exports = router;

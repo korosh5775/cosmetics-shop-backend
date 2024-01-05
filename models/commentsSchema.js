@@ -1,4 +1,5 @@
-// import modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require('mongoose');
 
 const CommentsSchema = mongoose.Schema({
@@ -27,5 +28,7 @@ const CommentsSchema = mongoose.Schema({
     }
 })
 
+// Export the Comment model
+// ------------------------------------------------
 module.exports = mongoose.model('Comment', CommentsSchema);
  

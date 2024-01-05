@@ -1,27 +1,34 @@
-//import core modules and application routes
-const express = require("express");            //* importing Express framework
-const indexRoutes = require("./routes/index"); // * importing main routes for the application
-const bodyParser = require("body-parser");     //* importing body parser middleware to parse request bodies
-const deleteExpiredOffCodes = require('./utils/cronjobs');    //* importing delete expired offcodes for remove expired offcodes daily
-require("dotenv").config(); //* load environment variables from .env file
-require("./utils/connection"); //* establish database connection
+// Import necessary modules
+// ------------------------------------------------
+const express = require("express"); // Import the Express framework
+const indexRoutes = require("./routes/index"); // Import the main application routes
+const bodyParser = require("body-parser"); // Import body-parser middleware for parsing request bodies
+const deleteExpiredOffCodes = require('./utils/cronjobs'); // Import the function for deleting expired off codes
+require("dotenv").config(); // Load environment variables from .env file
+require("./utils/connection"); // Establish database connection
 
-
-
-//* initialize Express application instance
+// Create an Express application instance
+// ------------------------------------------------
 const app = express();
 
-//* use bodyParser middleware to parse json requests
-app.use(bodyParser.json());
+// Use body-parser middleware
+// ------------------------------------------------
+app.use(bodyParser.json()); // Parse JSON request bodies
 
-///* set up root route
-app.use("/", indexRoutes);
+// Set up root route
+// ------------------------------------------------
+app.use("/", indexRoutes); // Map the root route to the index routes
 
-deleteExpiredOffCodes;//*this will remove all expired offCodes daily
+// Run the job to delete expired off codes
+// ------------------------------------------------
+deleteExpiredOffCodes; // This will remove expired off codes daily
 
+// Configure server port
+// ------------------------------------------------
+const port = process.env.PORT || 3000; // Use port from environment variable or default to 3000
 
-//* configure the server port
-const port = process.env.PORT || 3000; //*use environment variable or default to 3000
+// Start the server
+// ------------------------------------------------
 app.listen(port, () => {
   console.log(`app is running on ${port}`);
 });

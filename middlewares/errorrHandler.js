@@ -7,5 +7,5 @@ const errorHandler = (error, req, res, next)=>{
     res.status(status).json({message, data})//* send status that gote from error as status and send message and data as json to user
 }
 
-//exports errorHandler
+//exports errorHandler function
 module.exports = errorHandler;

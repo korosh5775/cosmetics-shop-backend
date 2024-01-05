@@ -1,33 +1,44 @@
-// Import Modules
+// Import necessary modules
+// ------------------------------------------------
 const Products = require("../../../models/productsSchema");
 
+// Define the newProduct function
+// ------------------------------------------------
 const newProduct = async (req, res, next) => {
-  try {
-    //* destructuring the product details from request body
-    const { name, price, description,quantity, category } = req.body;
-    //* constructing image file path with the uploaded filename from the request
-    const image = `${req.file.filename}`;
+ try {
+   // Extract product details from request body
+   // ------------------------------------------------
+   const { name, price, description, quantity, category } = req.body;
 
-    //* creating a new instance of the Products model with the received data
-    const newProduct = new Products({
-      name,
-      price,
-      description,
-      quantity,
-      image,
-      category,
-    });
+   // Construct image file path
+   // ------------------------------------------------
+   const image = `${req.file.filename}`;
 
-    //* saving the new product to the database
-    const savedProduct = await newProduct.save();
+   // Create a new product object
+   // ------------------------------------------------
+   const newProduct = new Products({
+     name,
+     price,
+     description,
+     quantity,
+     image,
+     category,
+   });
 
-    //* responding with a JSON containing the saved product data
-    res.status(201).json(savedProduct);
-  } catch (error) {
-    //* passing any errors to the next middleware for error handling
-    next(error);
-  }
+   // Save the product to the database
+   // ------------------------------------------------
+   const savedProduct = await newProduct.save();
+
+   // Send a success response with the saved product
+   // ------------------------------------------------
+   res.status(201).json(savedProduct);
+ } catch (error) {
+   // Handle errors by passing them to the next middleware
+   // ------------------------------------------------
+   next(error);
+ }
 };
 
-// exports newProduct
+// Export the newProduct function
+// ------------------------------------------------
 module.exports = newProduct;

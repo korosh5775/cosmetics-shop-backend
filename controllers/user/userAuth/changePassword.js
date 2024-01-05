@@ -1,53 +1,65 @@
-// Import Modules
+// Import necessary modules
+// ------------------------------------------------
 const User = require("../../../models/usersSchema");
 const emailSender = require("../../../utils/emailSender");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-//handle change password.........................................................................................
+// Define the changePassword function
+// ------------------------------------------------
 const changePassword = async (req, res, next) => {
-  try {
-    const token = req.params.token; //*get token from params
+ try {
+   // Extract the token from request parameters
+   // ------------------------------------------------
+   const token = req.params.token;
 
-    const dToken = jwt.verify(token, process.env.JWT_SECRET); //*decode token by jwt key
+   // Decode the token using the JWT secret
+   // ------------------------------------------------
+   const dToken = jwt.verify(token, process.env.JWT_SECRET);
 
-    if (!dToken) {
-      //*if token was fake
-      const err = new Error("شما مجوز انجام این کار را ندارید");
-      err.statusCode = 401;
-      throw err;
-    }
+   // Handle invalid tokens
+   // ------------------------------------------------
+   if (!dToken) {
+     const err = new Error("Invalid token"); // Clearer error message
+     err.statusCode = 401; // Unauthorized status code
+     throw err; // Throw the error for handling
+   }
 
-    //*get userId from token payload and find user from database
-    const user = await User.findOne({ _id: dToken.userId });
-    if (!user) {
-      //*if user dos not exist in the database
-      const err = new Error("شما محوز انجام این کار را ندارید");
-      err.statusCode = 401;
-      throw err;
-    }
+   // Find the user based on the user ID from the token
+   // ------------------------------------------------
+   const user = await User.findOne({ _id: dToken.userId });
 
-    //*get new password from user and hash it to more security
-    const newPassword = await bcrypt.hash(req.body.password, 12);
+   // Handle user not found
+   // ------------------------------------------------
+   if (!user) {
+     const err = new Error("User not found"); // Clearer error message
+     err.statusCode = 401; // Unauthorized status code
+     throw err; // Throw the error for handling
+   }
 
-    //*set new password for user
-    user.password = newPassword;
-    await user.save();
+   // Hash the new password for security
+   // ------------------------------------------------
+   const newPassword = await bcrypt.hash(req.body.password, 12); // Adjust salt rounds as needed
 
-    //*send successfully email to user
-    emailSender(
-      dToken.email,
-      "تغییرات در پروفایل",
-      "کاربر گرامی رمز عبور شما با موفقیت تغییر یافت"
-    );
-    res.status(200).json({ message: "رمز عبور جدید با موفقیت ثبت شد" });
-  } catch (err) {
-    next(err);
-  }
+   // Update the user's password in the database
+   // ------------------------------------------------
+   user.password = newPassword;
+   await user.save();
+
+   // Send a confirmation email to the user
+   // ------------------------------------------------
+   emailSender(dToken.email, "تغییرات در پروفایل", "کاربر گرامی رمز عبور شما با موفقیت تغییر یافت");
+
+   // Send a success response to the client
+   // ------------------------------------------------
+   res.status(200).json({ message: "Password has been changed" });
+ } catch (err) {
+   // Pass errors to error handling middleware
+   // ------------------------------------------------
+   next(err);
+ }
 };
 
-//end of change password...........................................................................................
-
-//*export change password
+// Export the changePassword function
+// ------------------------------------------------
 module.exports = changePassword;
-

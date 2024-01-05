@@ -1,30 +1,39 @@
-//this utility created for manage products quantity after creating an order
-//and it will use in new order
+// Import the Product model
+// ------------------------------------------------
 const Product = require('../models/productsSchema');
-exports.pqcontrol = async(cart)=>{
-    for (let item of cart.items) {
-    //* fetch the product to get the current price
+
+// Export the pqcontrol function for managing product quantities
+// ------------------------------------------------
+exports.pqcontrol = async (cart) => {
+  // Iterate through each item in the cart
+  // ------------------------------------------------
+  for (let item of cart.items) {
+    // Fetch the product details from the database
+    // ------------------------------------------------
     const product = await Product.findById(item.product._id);
 
+    // Handle product not found error
+    // ------------------------------------------------
     if (!product) {
-      //* handle error if the product doesn't exist anymore
       const err = new Error(`${item.product.name} not found`);
-      err.statusCode = 404; //*not found
+      err.statusCode = 404; // Not found
       throw err;
     }
 
-    //* calculating new product quantity after creating an order
+    // Update product quantity
+    // ------------------------------------------------
     product.quantity -= item.quantity;
 
-    //* checks that the quantity of the ordered product is not more than the stock
+    // Check for insufficient stock
+    // ------------------------------------------------
     if (product.quantity < 0) {
-        const err = new Error(`Not enough stock for ${item.product.name}`);
-        err.statusCode = 400;//*bad request
-        throw err;
-      }
-  
-      //* if every things was ok new product with new quantity will be saved in database.
-      await product.save();
-  }
-}
+      const err = new Error(`Not enough stock for ${item.product.name}`);
+      err.statusCode = 400; // Bad request
+      throw err;
+    }
 
+    // Save updated product quantity to the database
+    // ------------------------------------------------
+    await product.save();
+  }
+};

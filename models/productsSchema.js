@@ -1,4 +1,5 @@
-// Import Modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
@@ -35,5 +36,6 @@ const ProductSchema = mongoose.Schema({
 });
 ProductSchema.plugin(mongoosePaginate);
 
-//export schema
+// Export the Product model
+// ------------------------------------------------
 module.exports = mongoose.model("Product", ProductSchema);

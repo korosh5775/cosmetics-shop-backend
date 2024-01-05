@@ -1,69 +1,84 @@
-//import modules
+// Import necessary modules
+// ------------------------------------------------
 const Cart = require("../../../models/cartSchema");
 const Product = require("../../../models/productsSchema");
 
+// Define the newCart function
+// ------------------------------------------------
 const newCart = async (req, res, next) => {
-  try {
-    const { items } = req.body;
-    const userId = req.userId; // get user Id from req object that sent from token (authorization method);
+ try {
+   // Extract items and user ID from request
+   // ------------------------------------------------
+   const { items } = req.body;
+   const userId = req.userId; // Obtained from authorization
 
-    // check if the user ID is found.
-    if (!userId) {
-      const err = new Error("Please login first");
-      err.statusCode = 401; // not authenticated
-      throw err; // throw error to catch
-    }
+   // Validate user authentication
+   // ------------------------------------------------
+   if (!userId) {
+     const err = new Error("Please login first");
+     err.statusCode = 401; // Unauthorized
+     throw err;
+   }
 
-    //find user's cart from database by userId
-    let cart = await Cart.findOne({ user: userId });
+   // Find or create a cart for the user
+   // ------------------------------------------------
+   let cart = await Cart.findOne({ user: userId });
 
-    // checking the stock before adding items to the cart
-    for (const item of items) {
-      const product = await Product.findById(item.product);
-      if (!product) {
-        const err = new Error(`Product with ID ${item.product} not found`);
-        err.statusCode = 404;//* not found
-        throw err;
-      }
-      //* checks that the ordered goods are not more than the ones in the database.
-      if (item.quantity > product.quantity) {
-        const err = new Error(`Not enough stock for ${product.name}`);
-        err.statusCode = 400; //* bad request
-        throw err;
-      }
-      
-    }
+   // Validate product availability and stock
+   // ------------------------------------------------
+   for (const item of items) {
+     const product = await Product.findById(item.product);
 
-    // if user already had a cart...
-    if (cart) {
-      // checks if the new item added to the shopping cart was already available or not.
-      items.forEach((newItem) => {
-        let existingItem = cart.items.find(
-          (cartItem) => cartItem.product.toString() === newItem.product // comparison after converting ObjectId to String
-        );
+     if (!product) {
+       const err = new Error(`Product with ID ${item.product} not found`);
+       err.statusCode = 404; // Not found
+       throw err;
+     }
 
-        if (existingItem) {
-          existingItem.quantity += newItem.quantity;
-        } else {
-          // if similar product is not found, add the new item to the cart
-          cart.items.push(newItem);
-        }
-      });
-    } else {
-      // if the shopping cart was empty, create a new cart with the items
-      cart = new Cart({
-        user: userId,
-        items,
-      });
-    }
+     if (item.quantity > product.quantity) {
+       const err = new Error(`Not enough stock for ${product.name}`);
+       err.statusCode = 400; // Bad request
+       throw err;
+     }
+   }
 
-    // save new or updated cart to database
-    const savedCart = await cart.save();
-    res.status(201).json(savedCart);
-  } catch (error) {
-    next(error); // Make sure to handle the thrown errors in your error handling middleware
-  }
+   // Add or update items in the cart
+   // ------------------------------------------------
+   if (cart) {
+     // Update existing items or add new items
+     items.forEach((newItem) => {
+       const existingItem = cart.items.find((cartItem) =>
+         cartItem.product.toString() === newItem.product.toString()
+       );
+
+       if (existingItem) {
+         existingItem.quantity += newItem.quantity;
+       } else {
+         cart.items.push(newItem);
+       }
+     });
+   } else {
+     // Create a new cart for the user
+     cart = new Cart({
+       user: userId,
+       items,
+     });
+   }
+
+   // Save the cart to the database
+   // ------------------------------------------------
+   const savedCart = await cart.save();
+
+   // Send a success response with the saved cart
+   // ------------------------------------------------
+   res.status(201).json(savedCart);
+ } catch (error) {
+   // Pass errors to error handling middleware
+   // ------------------------------------------------
+   next(error);
+ }
 };
 
-//export new cart
+// Export the newCart function
+// ------------------------------------------------
 module.exports = newCart;

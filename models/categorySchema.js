@@ -1,4 +1,5 @@
-// Import Modules
+// Import the Mongoose library
+// ------------------------------------------------
 const mongoose = require("mongoose");
 
 //create Schema
@@ -9,5 +10,6 @@ const CategorySchema = mongoose.Schema({
   }
 });
 
-//export schema
+// Export the Category model
+// ------------------------------------------------
 module.exports = mongoose.model("Category", CategorySchema);

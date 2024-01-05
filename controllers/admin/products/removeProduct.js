@@ -1,43 +1,62 @@
-// Import modules
+// Import necessary modules
+// ------------------------------------------------
 const Products = require("../../../models/productsSchema");
 const fs = require("fs");
 const path = require("path");
 
+// Define the removeProduct function
+// ------------------------------------------------
 const removeProduct = async (req, res, next) => {
-  try {
-    const { productId } = req.params;
-    const product = await Products.findById(productId);
+ try {
+   // Extract product ID from request params
+   // ------------------------------------------------
+   const { productId } = req.params;
 
-    //* check if product doesn't exists
-    if (!product) {
-      const err = new Error("There is no product to remove.");
-      err.statusCode = 404; //* not found
-      throw err;
-    }
+   // Find the product to be removed
+   // ------------------------------------------------
+   const product = await Products.findById(productId);
 
-    //* find image from public folder
-    const imagePath = path.join(
-      __dirname,
-      "..",
-      "..",
-      "..",
-      "public",
-      "images",
-      product.image
-    );
-    fs.unlink(imagePath, async (err) => {
-      if (err) {
-        next(err); //* forward the error if unable to delete the image
-      } else {
-        //* if the product image is successfully deleted, the product will be deleted
-        await Products.findByIdAndDelete(productId);
-        res.status(200).json("Product and image removed.");
-      }
-    });
-  } catch (err) {
-    next(err);
-  }
+   // Check if the product exists
+   // ------------------------------------------------
+   if (!product) {
+     const err = new Error("There is no product to remove.");
+     err.statusCode = 404; // Not found
+     throw err;
+   }
+
+   // Construct the image path
+   // ------------------------------------------------
+   const imagePath = path.join(
+     __dirname,
+     "..",
+     "..",
+     "..",
+     "public",
+     "images",
+     product.image
+   );
+
+   // Delete the product image
+   // ------------------------------------------------
+   fs.unlink(imagePath, async (err) => {
+     if (err) {
+       // Handle errors during image deletion
+       // ------------------------------------------------
+       next(err);
+     } else {
+       // Delete the product record from the database
+       // ------------------------------------------------
+       await Products.findByIdAndDelete(productId);
+       res.status(200).json("Product and image removed.");
+     }
+   });
+ } catch (err) {
+   // Handle general errors
+   // ------------------------------------------------
+   next(err);
+ }
 };
 
-// Export removeProduct
+// Export the removeProduct function
+// ------------------------------------------------
 module.exports = removeProduct;

@@ -1,48 +1,58 @@
-// Import moduls
+// Import necessary modules
+// ------------------------------------------------
 const express = require("express");
 
-// Import modules - middlewares
-const validated = require("../../../middlewares/validator");
-const authenticated = require("../../../middlewares/authorization");
+// Import middlewares
+// ------------------------------------------------
+const validated = require("../../../middlewares/validator"); // Data validation middleware
+const authenticated = require("../../../middlewares/authorization"); // Authentication middleware
 
-// Import modules - authorization
+// Import controllers for user authorization
+// ------------------------------------------------
 const register = require("../../../controllers/user/userAuth/register");
 const login = require("../../../controllers/user/userAuth/login");
 const forgetPassword = require("../../../controllers/user/userAuth/forgetPassword");
 const changePassword = require("../../../controllers/user/userAuth/changePassword");
 
-// Import modules - products
-const getProduct = require('../../../controllers/user/products/getProduct');
+// Import controllers for products
+// ------------------------------------------------
+const getProduct = require("../../../controllers/user/products/getProduct");
 const batchedProducts = require("../../../controllers/user/products/getBatchOfProduct");
 const allProducts = require("../../../controllers/user/products/getOneAllProducts");
 
-//Import modules - order
+// Import controllers for orders
+// ------------------------------------------------
 const newCart = require("../../../controllers/user/cart/newCart");
-const newOrder = require("../../../controllers/user/order/newOrder"); 
-const getOrders = require("../../../controllers/user/order/getOrders"); 
+const newOrder = require("../../../controllers/user/order/newOrder");
+const getOrders = require("../../../controllers/user/order/getOrders");
 
-//.........................................................................................................
+//? ...........................................................................................................
 
-//*get router from express
+// Create an Express router
+// ------------------------------------------------
 const router = express.Router();
 
-//*handle http methods for user authorization
-router.post("/auth/register", validated, register);
-router.post("/auth/login", login);
-router.post("/auth/forget_password", forgetPassword);
-router.post("/auth/change_password/:token", changePassword);
+//? ...........................................................................................................
 
-//*handle http methods for product's datas
-router.get("/product/:productId",getProduct);
-router.get("/batched-products/:categoryId", batchedProducts);
-router.get("/all-products", allProducts); //*this will be main page in frontend
+// Define routes for user authorization
+// ------------------------------------------------
+router.post("/auth/register", validated, register); // Register a new user
+router.post("/auth/login", login); // Log in a user
+router.post("/auth/forget_password", forgetPassword); // Handle forgotten passwords
+router.post("/auth/change_password/:token", changePassword); // Change a user's password
 
-//*handle http methods for handle orders
-router.post("/add-to-cart",authenticated,  newCart);
-router.post("/add-to-order", authenticated, newOrder);
-router.get("/get-orders", authenticated,authenticated, getOrders);
+// Define routes for product data
+// ------------------------------------------------
+router.get("/product/:productId", getProduct); // Get a specific product
+router.get("/batched-products/:categoryId", batchedProducts); // Get a batch of products by category
+router.get("/all-products", allProducts); // Get all products (used for the main page)
 
-//............................................................................................................
+// Define routes for handling orders
+// ------------------------------------------------
+router.post("/add-to-cart", authenticated, newCart); // Add a product to the cart
+router.post("/add-to-order", authenticated, newOrder); // Create a new order
+router.get("/get-orders", authenticated, getOrders); // Get a user's orders
 
-//*export router
+// Export the router
+// ------------------------------------------------
 module.exports = router;

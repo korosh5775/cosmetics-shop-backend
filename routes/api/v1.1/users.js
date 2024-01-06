@@ -26,6 +26,10 @@ const newCart = require("../../../controllers/user/cart/newCart");
 const newOrder = require("../../../controllers/user/order/newOrder");
 const getOrders = require("../../../controllers/user/order/getOrders");
 
+// Import controllers for comments
+// ------------------------------------------------
+const newComments = require('../../../controllers/user/comments/newComment');
+
 //? ...........................................................................................................
 
 // Create an Express router
@@ -52,6 +56,11 @@ router.get("/all-products", allProducts); // Get all products (used for the main
 router.post("/add-to-cart", authenticated, newCart); // Add a product to the cart
 router.post("/add-to-order", authenticated, newOrder); // Create a new order
 router.get("/get-orders", authenticated, getOrders); // Get a user's orders
+
+
+// Define routes for comments
+// ------------------------------------------------
+router.post("/new-comments/:productId", authenticated, newComments); // Add a new comment
 
 // Export the router
 // ------------------------------------------------

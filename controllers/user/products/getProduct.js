@@ -1,6 +1,7 @@
 // Import necessary module
 // ------------------------------------------------
 const Product = require("../../../models/productsSchema");
+const Comments = require("../../../models/commentsSchema");
 
 // Define the getProduct function
 // ------------------------------------------------
@@ -22,9 +23,26 @@ const getProduct = async (req, res, next) => {
      throw err; // Throw the error for error handling
    }
 
-   // Send the product details as a JSON response
+   //?................................................
+   const comments = await Comments.find({product: productId});
+
+   if (comments) {
+    await Product.updateOne(
+    { _id: productId },
+    {
+      $set: { // Use $set operator to update specific fields
+       comments
+      },
+    }
+  );
+  }
+   
+  //?..................................................
+
+  // Send the product details as a JSON response
    // ------------------------------------------------
    res.status(200).json(product);
+   
  } catch (error) {
    // Pass errors to error handling middleware
    // ------------------------------------------------

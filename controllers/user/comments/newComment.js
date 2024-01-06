@@ -2,6 +2,7 @@
 // ------------------------------------------------
 const Comments = require("../../../models/commentsSchema");
 const Order = require('../../../models/orderSchema');  
+const Product = require('../../../models/productsSchema');
 
 // Define the newComment function
 // ------------------------------------------------
@@ -11,7 +12,7 @@ const newComment = async (req, res, next) => {
    // ------------------------------------------------
    const { comment, rate } = req.body;
    const { productId } = req.params;
-   const user = req.userId;
+   const userId = req.userId;
 
    // Check if the product exists
    // ------------------------------------------------
@@ -34,7 +35,7 @@ const newComment = async (req, res, next) => {
    // ------------------------------------------------
    const userHasPurchased = await Order.findOne({
      user: userId,
-     'items.product': productId
+     'items.productName': productExists.name
    });
 
    if (!userHasPurchased) {
@@ -46,7 +47,7 @@ const newComment = async (req, res, next) => {
    // Create a new comment
    // ------------------------------------------------
    const newComment = new Comments({
-     user,
+     user: userId,
      product: productId,
      comment,
      rate,

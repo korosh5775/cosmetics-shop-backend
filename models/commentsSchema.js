@@ -17,7 +17,7 @@ const CommentsSchema = mongoose.Schema({
         maxlength:130,
     },
     rate:{
-        tyoe: Number,
+        type: Number,
         required: true,
         min: 1,
         max:5

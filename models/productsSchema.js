@@ -3,7 +3,16 @@
 const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
-
+const productsCommentsSchema = mongoose.Schema({
+  comment:{
+    type: String,
+    required: true
+  },
+  createdAt:{
+    type:Date,
+    required: true
+  }
+})
 //create Schema
 const ProductSchema = mongoose.Schema({
   image: {
@@ -33,6 +42,7 @@ const ProductSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
+  comments:[productsCommentsSchema]
 });
 ProductSchema.plugin(mongoosePaginate);
 

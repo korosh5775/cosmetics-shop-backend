@@ -8,6 +8,10 @@ const productsCommentsSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  rate:{
+    type: Number,
+    required: true
+  },
   createdAt:{
     type:Date,
     required: true

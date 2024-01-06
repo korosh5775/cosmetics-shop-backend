@@ -36,12 +36,15 @@ const getProduct = async (req, res, next) => {
     }
   );
   }
+  const productWithComments = await Product.findById(productId);
    
+// Send the product details as a JSON response
+   // ------------------------------------------------
+   res.status(200).json(productWithComments);
+
   //?..................................................
 
-  // Send the product details as a JSON response
-   // ------------------------------------------------
-   res.status(200).json(product);
+  
    
  } catch (error) {
    // Pass errors to error handling middleware

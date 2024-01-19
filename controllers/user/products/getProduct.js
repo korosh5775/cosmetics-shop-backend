@@ -23,7 +23,7 @@ const getProduct = async (req, res, next) => {
      throw err; // Throw the error for error handling
    }
 
-   //?................................................
+ /*   //?................................................
    const comments = await Comments.find({product: productId});
 
    if (comments) {
@@ -36,11 +36,11 @@ const getProduct = async (req, res, next) => {
     }
   );
   }
-  const productWithComments = await Product.findById(productId);
+  const productWithComments = await Product.findById(productId); */
    
 // Send the product details as a JSON response
    // ------------------------------------------------
-   res.status(200).json(productWithComments);
+   res.status(200).json(product);
 
   //?..................................................
 

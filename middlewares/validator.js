@@ -8,7 +8,7 @@ const userValidation = Joi.object({
     .min(4)
     .max(64)
     .required()
-    .pattern(new RegExp("^[A-Za-z\\s]+$")) //*use english letters and no blank space accepted
+    //.pattern(new RegExp("^[A-Za-z\\s]+$")) //*use english letters and no blank space accepted
     .trim(),
     
   email: Joi.string()
@@ -16,7 +16,7 @@ const userValidation = Joi.object({
     .required()
     .trim(),
 
-  userName: Joi.string().alphanum().min(4).max(64).required().trim().pattern(new RegExp("^[A-Za-z1-9]+$")),
+  userName: Joi.string().alphanum().min(4).max(64).required().trim().pattern(new RegExp("^[A-Za-z0-9]+$")),
 
   password: Joi.string()
     .min(8)

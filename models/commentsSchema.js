@@ -11,6 +11,10 @@ const CommentsSchema = mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref: "Product"
     },
+    userName:{
+        type: String,
+        required:true
+    },
     comment:{
         type:String,
         required: true,

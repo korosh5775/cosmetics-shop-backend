@@ -4,6 +4,10 @@ const mongoose = require("mongoose");
 const mongoosePaginate = require("mongoose-paginate-v2");
 
 const productsCommentsSchema = mongoose.Schema({
+  userName:{
+    type:String,
+    required: true
+  },
   comment:{
     type: String,
     required: true
@@ -42,6 +46,12 @@ const ProductSchema = mongoose.Schema({
     type: Number,
     required: true
   },
+  averageRates:{
+    type: Number,
+    required: true,
+    default: 0
+  }
+  ,
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",

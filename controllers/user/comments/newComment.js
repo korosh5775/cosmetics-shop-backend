@@ -3,6 +3,7 @@
 const Comments = require("../../../models/commentsSchema");
 const Order = require("../../../models/orderSchema");
 const Product = require("../../../models/productsSchema");
+const User = require('../../../models/usersSchema');
 
 // Define the newComment function
 // ------------------------------------------------
@@ -13,6 +14,13 @@ const newComment = async (req, res, next) => {
     const { comment, rate } = req.body;
     const { productId } = req.params;
     const userId = req.userId;
+
+    const userExists = await User.findById(userId);
+    if(!userExists){
+      const err = new Error("please login first");
+      err.statusCode = 401; // Unauthorized
+      throw err;
+    }
 
     // Check if the product exists
     // ------------------------------------------------
@@ -51,6 +59,20 @@ const newComment = async (req, res, next) => {
       product: productId,
     });
 
+    // Add new comments to product
+    //-------------------------------------------------
+    const findPeoductAndAddNewComment = async()=>{
+      const comments = await Comments.find({product: productId});
+      await Product.updateOne(
+        { _id: productId },
+        {
+          $set: { // Use $set operator to update specific fields
+           comments
+          },
+        }
+      );
+    }
+
     // If the user already has a comment, update it
     // ------------------------------------------------
     if (existingComment) {
@@ -58,6 +80,10 @@ const newComment = async (req, res, next) => {
         { _id: existingComment._id },
         { $set: { comment, rate } }
       );
+
+      // Add new comment to product
+      // ------------------------------------------------
+      findPeoductAndAddNewComment()
 
       // Send a success response with the successfully message
       // ------------------------------------------------
@@ -68,6 +94,7 @@ const newComment = async (req, res, next) => {
       const newComment = new Comments({
         user: userId,
         product: productId,
+        userName: userExists.userName,
         comment,
         rate,
       });
@@ -75,6 +102,11 @@ const newComment = async (req, res, next) => {
       // Save the comment to the database
       // ------------------------------------------------
       const savedComment = await newComment.save();
+
+      // Add new comment to product
+      // ------------------------------------------------
+      findPeoductAndAddNewComment()
+      //?......................................................2
 
       // Send a success response with the saved comment
       // ------------------------------------------------

@@ -23,20 +23,6 @@ const getProduct = async (req, res, next) => {
      throw err; // Throw the error for error handling
    }
 
- /*   //?................................................
-   const comments = await Comments.find({product: productId});
-
-   if (comments) {
-    await Product.updateOne(
-    { _id: productId },
-    {
-      $set: { // Use $set operator to update specific fields
-       comments
-      },
-    }
-  );
-  }
-  const productWithComments = await Product.findById(productId); */
    
 // Send the product details as a JSON response
    // ------------------------------------------------

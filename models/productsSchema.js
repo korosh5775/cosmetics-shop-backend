@@ -48,7 +48,6 @@ const ProductSchema = mongoose.Schema({
   },
   averageRates:{
     type: Number,
-    required: true,
     default: 0
   }
   ,

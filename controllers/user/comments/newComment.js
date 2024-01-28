@@ -1,56 +1,23 @@
-// Import modules
+// Import necessary modules
 // ------------------------------------------------
 const Comments = require("../../../models/commentsSchema");
-const Order = require("../../../models/orderSchema");
-const Product = require("../../../models/productsSchema");
-const User = require('../../../models/usersSchema');
+const { nCEControl } = require("../../../utils/nCEControl");
+const { findProductAndAddNewComment } = require("../../../utils/fPAANComment");
+const { averageRateCalculator } = require("../../../utils/aRCalculator");
 
 // Define the newComment function
 // ------------------------------------------------
 const newComment = async (req, res, next) => {
   try {
-    // Extract data from request
+    // Extract data from the request body and params
     // ------------------------------------------------
     const { comment, rate } = req.body;
     const { productId } = req.params;
     const userId = req.userId;
 
-    const userExists = await User.findById(userId);
-    if(!userExists){
-      const err = new Error("please login first");
-      err.statusCode = 401; // Unauthorized
-      throw err;
-    }
-
-    // Check if the product exists
+    // Validate input values
     // ------------------------------------------------
-    const productExists = await Product.findById(productId);
-    if (!productExists) {
-      const err = new Error("The product does not exist");
-      err.statusCode = 404; // Not found
-      throw err;
-    }
-
-    // Validate the rate value
-    // ------------------------------------------------
-    if (rate < 1 || rate > 5) {
-      const err = new Error("Rate number must be between 1 and 5");
-      err.statusCode = 400; // Bad request
-      throw err;
-    }
-
-    // Check if the user has purchased the product
-    // ------------------------------------------------
-    const userHasPurchased = await Order.findOne({
-      user: userId,
-      "items.productName": productExists.name,
-    });
-
-    if (!userHasPurchased) {
-      const err = new Error("Please purchase the product first.");
-      err.statusCode = 403; // Forbidden
-      throw err;
-    }
+    nCEControl(userId, productId, rate);
 
     // Check if the user already has a comment for the product
     // ------------------------------------------------
@@ -58,20 +25,6 @@ const newComment = async (req, res, next) => {
       user: userId,
       product: productId,
     });
-
-    // Add new comments to product
-    //-------------------------------------------------
-    const findPeoductAndAddNewComment = async()=>{
-      const comments = await Comments.find({product: productId});
-      await Product.updateOne(
-        { _id: productId },
-        {
-          $set: { // Use $set operator to update specific fields
-           comments
-          },
-        }
-      );
-    }
 
     // If the user already has a comment, update it
     // ------------------------------------------------
@@ -81,20 +34,21 @@ const newComment = async (req, res, next) => {
         { $set: { comment, rate } }
       );
 
-      // Add new comment to product
-      // ------------------------------------------------
-      findPeoductAndAddNewComment()
-
-      // Send a success response with the successfully message
+      // Send a success response indicating comment update
       // ------------------------------------------------
       res.status(200).json("Your comment has been updated");
+
+      // Update product with new comment and recalculate average rating
+      // ------------------------------------------------
+      await findProductAndAddNewComment(productId);
+      await averageRateCalculator(productId);
     } else {
       // Create a new comment
       // ------------------------------------------------
       const newComment = new Comments({
         user: userId,
         product: productId,
-        userName: userExists.userName,
+        userName: userExists.userName, // Assuming userExists is defined elsewhere
         comment,
         rate,
       });
@@ -103,10 +57,10 @@ const newComment = async (req, res, next) => {
       // ------------------------------------------------
       const savedComment = await newComment.save();
 
-      // Add new comment to product
+      // Update product with new comment and recalculate average rating
       // ------------------------------------------------
-      findPeoductAndAddNewComment()
-      //?......................................................2
+      await findProductAndAddNewComment(productId);
+      await averageRateCalculator(productId);
 
       // Send a success response with the saved comment
       // ------------------------------------------------

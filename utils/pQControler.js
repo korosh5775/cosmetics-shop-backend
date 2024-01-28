@@ -1,3 +1,5 @@
+// This function reduces the number of each product after each order.
+
 // Import the Product model
 // ------------------------------------------------
 const Product = require('../models/productsSchema');

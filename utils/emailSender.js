@@ -8,8 +8,8 @@ const smtpTransport = require("nodemailer-smtp-transport"); // SMTP transport pl
 const transporterDetails = smtpTransport({
   service: "yahoo", // Replace with the actual email service provider
   auth: {
-    user: "mydeveloperemail@yahoo.com", // Replace with your email address
-    pass: "mqqbtupakcmthcdm", // Replace with your email password
+    user: "*********@yahoo.com", // Replace with your email address
+    pass: "*********", // Replace with your email password
   },
   tls: {
     rejectUnauthorized: false, // Disable TLS certificate checking for development (not for production!)
@@ -22,7 +22,7 @@ const emailSender = (email, subject, text) => {
   const transporter = nodeMailer.createTransport(transporterDetails); // Create a transporter instance
 
   transporter.sendMail({
-    from: "mydeveloperemail@yahoo.com", // Sender's email address
+    from: "**********@yahoo.com", // Sender's email address
     to: email, // Recipient's email address
     subject, // Email subject
     text, // Email body text

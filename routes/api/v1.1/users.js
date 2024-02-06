@@ -18,7 +18,7 @@ const changePassword = require("../../../controllers/user/userAuth/changePasswor
 // ------------------------------------------------
 const getProduct = require("../../../controllers/user/products/getProduct");
 const batchedProducts = require("../../../controllers/user/products/getBatchOfProduct");
-const allProducts = require("../../../controllers/user/products/getOneAllProducts");
+const allProducts = require("../../../controllers/user/products/getAllProducts");
 
 // Import controllers for orders
 // ------------------------------------------------

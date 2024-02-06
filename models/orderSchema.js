@@ -39,6 +39,14 @@ const OrderSchema = mongoose.Schema({
   items: [OrderItemSchema], 
   totalPrice: Number,
   offCode: String,
+  adminNote:{
+    type: String,
+    maxlength: 254
+  },
+  userNote:{
+    type: String,
+    maxlength: 254
+  },
   status: {
     type: String,
     default: "Pending",

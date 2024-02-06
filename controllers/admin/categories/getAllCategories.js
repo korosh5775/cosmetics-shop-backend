@@ -10,6 +10,14 @@ const getCategories = async (req, res) => {
     // ------------------------------------------------
     const categories = await Category.find();
 
+    // Checking if There are no categories to display
+    // ------------------------------------------------
+    if(!categories){
+      const err = new Error("There are no categories to display");
+      err.statusCode = 404; // Not found
+      throw err;
+    }
+
     // Send a response with the categories
     // ------------------------------------------------
     res.json(categories);

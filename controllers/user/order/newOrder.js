@@ -11,7 +11,7 @@ const newOrder = async (req, res, next) => {
  try {
    // Extract user information and offCode from request
    // ------------------------------------------------
-   const { userName, location, phone, offCode } = req.body;
+   const { userName, location, phone, userNote, offCode } = req.body;
    const userId = req.userId; // Obtained from authorization
 
    // Validate user authentication
@@ -42,8 +42,8 @@ const newOrder = async (req, res, next) => {
    if (offCode) {
      existCode = await OffCode.findOne({
        code: offCode,
-       startDate: { $lte: new Date() }, // Start date should be before or equal to current date
-       expireDate: { $gte: new Date() }, // Expire date should be after or equal to current date
+       startDate: { $lte: new Date() },
+       expireDate: { $gte: new Date() },
      }).lean();
 
      if (!existCode) {
@@ -60,47 +60,93 @@ const newOrder = async (req, res, next) => {
      const product = item.product; // Access product information due to '.populate'
      let itemTotalPrice = product.price * item.quantity;
 
+     // Apply discount if the product is eligible
+   // ------------------------------------------------
      if (existCode && validProducts.includes(product._id.toString())) {
        const discount = (existCode.percent / 100) * product.price;
-       itemTotalPrice -= discount * item.quantity; // Apply discount
+       itemTotalPrice -= discount * item.quantity;
      }
 
      totalPrice += itemTotalPrice;
 
+     // Return product information with updated price
+   // ------------------------------------------------
      return { productName: product.name, quantity: item.quantity, price: itemTotalPrice };
    });
 
-   // Create the new order
+   // Check if a pending order already exists for the user
    // ------------------------------------------------
-   const order = new Order({
-     user: userId,
-     userName,
-     location,
-     phone,
-     items: orderItems,
-     totalPrice,
-     offCode,
-   });
+   const existOrder = await Order.findOne({ user: userId, status: "Pending" });
 
-   // Update product quantities based on the order
+   if (existOrder) {
+     // Update existing order with new items
+   // ------------------------------------------------
+     for (const item of orderItems) {
+       const existingItemIndex = existOrder.items.findIndex(orderItem => orderItem.productName === item.productName);
+
+       if (existingItemIndex > -1) {
+         // Update quantity and price if item exists
+   // ------------------------------------------------
+         existOrder.items[existingItemIndex].quantity += item.quantity;
+         existOrder.items[existingItemIndex].price += item.price;
+       } else {
+         // Add new item if it doesn't exist
+   // ------------------------------------------------
+         existOrder.items.push(item);
+       }
+     }
+
+     // Update total price of order
+   // ------------------------------------------------
+     existOrder.totalPrice += totalPrice;
+
+     // Save updated order to database
+   // ------------------------------------------------
+     const updatedOrder = await existOrder.save();
+
+     // Respond with updated order
+   // ------------------------------------------------
+     res.status(200).json(updatedOrder);
+   } else {
+     // If no pending order exists, create a new one
+   // ------------------------------------------------
+     const order = new Order({
+       user: userId,
+       userName,
+       location,
+       phone,
+       userNote,
+       items: orderItems,
+       totalPrice,
+       offCode,
+     });
+
+     // Save new order to database
+   // ------------------------------------------------
+     const savedOrder = await order.save();
+
+     // Respond with new saved order
+   // ------------------------------------------------
+     res.status(200).json(savedOrder);
+   }
+
+   // Update product quantities in inventory based on the order
    // ------------------------------------------------
    await pqcontrol(cart);
 
-   // Save the order and remove the cart
+   // Remove the cart after order submission
    // ------------------------------------------------
-   const savedOrder = await order.save();
    await Cart.deleteOne({ _id: cart._id });
 
-   // Send a success response with the saved order
+   // Finished processing the order
    // ------------------------------------------------
-   res.status(200).json(savedOrder);
  } catch (error) {
-   // Handle errors and pass them to error handling middleware
+   // Handle any errors that occur during order processing
    // ------------------------------------------------
    next(error);
  }
 };
 
-// Export the newOrder function
-// ------------------------------------------------
+// Export the newOrder function for use in other modules
+   // ------------------------------------------------
 module.exports = newOrder;

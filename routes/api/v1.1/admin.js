@@ -24,6 +24,8 @@ const removeCategory = require("../../../controllers/admin/categories/removeCate
 // Import controllers for orders
 // ------------------------------------------------
 const newOffCode = require("../../../controllers/admin/orders/offCodes");
+const getAllOrders = require('../../../controllers/admin/orders/getOreders');
+const updateOrderStatus = require('../../../controllers/admin/orders/updateOrederStatus');
 
 //? ......................................................................................................
 
@@ -59,6 +61,8 @@ router.delete("/products/remove/:productId", authenticated, isAdmin, removeProdu
 // Define routes for admin orders
 // ------------------------------------------------
 router.post("/orders/new-off-code", newOffCode); // Create a new discount code
+router.get("/orders/get-all",getAllOrders);
+router.patch("/orders/update-status/:orderId", updateOrderStatus);
 
 // Export the router
 // ------------------------------------------------

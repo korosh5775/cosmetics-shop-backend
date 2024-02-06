@@ -8,7 +8,7 @@ const updateOrderStatus = async (req, res, next) => {
   try {
     // Extract order ID, new status, and user note from request body
     const { status, adminNote } = req.body;
-    const { orderId} = req.params;
+    const { orderId } = req.params;
 
     // Validate user input
     // -------------------------------------------
@@ -33,14 +33,14 @@ const updateOrderStatus = async (req, res, next) => {
     // Update the order's status and add a note for the user
     // -------------------------------------------
     await Order.updateOne(
-      {_id: orderId},{
-      $set:{
-        status,
-        adminNote
-      }}
-    )
-
-    
+      { _id: orderId },
+      {
+        $set: {
+          status,
+          adminNote,
+        },
+      }
+    );
 
     // Send a success response with the updated order
     // -------------------------------------------

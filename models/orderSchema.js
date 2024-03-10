@@ -23,13 +23,22 @@ const OrderSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  userName: {
+  fullName: {
     type: String,
     required: true,
   },
-  location: {
+  address: {
     type: String,
     required: true,
+  },
+  plaque:{
+    type:Number,
+    required: true
+  },
+  postalCode:{
+    type: Number,
+    minlength: 10,
+    maxlength:10
   },
   phone: {
     type: String,

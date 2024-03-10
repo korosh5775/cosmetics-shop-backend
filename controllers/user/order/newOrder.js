@@ -11,7 +11,7 @@ const newOrder = async (req, res, next) => {
  try {
    // Extract user information and offCode from request
    // ------------------------------------------------
-   const { userName, location, phone, userNote, offCode } = req.body;
+   const {fullName, address, plaque,postalCode, phone, userNote, offCode } = req.body;
    const userId = req.userId; // Obtained from authorization
 
    // Validate user authentication
@@ -39,6 +39,7 @@ const newOrder = async (req, res, next) => {
    // Validate and fetch the offCode (if provided)
    // ------------------------------------------------
    let existCode;
+   let validProducts;
    if (offCode) {
      existCode = await OffCode.findOne({
        code: offCode,
@@ -51,7 +52,14 @@ const newOrder = async (req, res, next) => {
        err.statusCode = 404; // Not Found
        throw err;
      }
-   }
+    // Create a list of valid products from the offCode
+   // ------------------------------------------------
+   validProducts = existCode.items.map(item => item.product.toString());
+    }
+
+   console.log(existCode)
+
+  
 
    // Prepare order items and apply discount if applicable
    // ------------------------------------------------
@@ -76,7 +84,7 @@ const newOrder = async (req, res, next) => {
 
    // Check if a pending order already exists for the user
    // ------------------------------------------------
-   const existOrder = await Order.findOne({ user: userId, status: "Pending" });
+   const existOrder = await Order.findOne({ user: userId,address: address, status: "Pending" });
 
    if (existOrder) {
      // Update existing order with new items
@@ -100,20 +108,37 @@ const newOrder = async (req, res, next) => {
    // ------------------------------------------------
      existOrder.totalPrice += totalPrice;
 
-     // Save updated order to database
-   // ------------------------------------------------
-     const updatedOrder = await existOrder.save();
 
+     
+    await Order.updateOne(
+      { _id: existOrder._id },
+      {
+        $set: {
+          fullName,
+          address,
+          plaque,
+          postalCode,
+          phone,
+          userNote,
+          offCode,
+        },
+      }
+    );
+// Save updated order to database
+    // ------------------------------------------------
+    await existOrder.save();
      // Respond with updated order
    // ------------------------------------------------
-     res.status(200).json(updatedOrder);
+     res.status(200).json("your order has been updated");
    } else {
      // If no pending order exists, create a new one
    // ------------------------------------------------
      const order = new Order({
        user: userId,
-       userName,
-       location,
+       fullName,
+       address,
+       plaque,
+       postalCode,
        phone,
        userNote,
        items: orderItems,
